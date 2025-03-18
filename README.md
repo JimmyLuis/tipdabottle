@@ -1,4 +1,4 @@
-# tipdabottle
+# tipdabottle 🇩🇪
 tipdabottle ist ein Getränkebuchungssystem für Vereine, Organisationen oder gemeinschaftliche Einrichtungen. Es ermöglicht über ein Endgerät mit Internetzugang digital Getränkeschulden einzutragen. Keine lästigen Getränkelisten mehr, die immer neu ausgefüllt und gedruckt werden müssen. Dabei kann ganz individuell ein Sortiment hinzugefügt, Preise angepasst und Mitglieder verwaltet werden.
 > Im frühen Stadium dieses Projekts soll zunächst das Buchen und Bezahlen von Getränken ermöglcht werden. Erst später soll das Sortiment über den Client verändert, sowie Mitglieder hinzugefügt werden können.
 > Dieses Projekt wird von mir hauptsächlich in meiner Freizeit entwickelt. Der momentane Projektstatus: **nicht funktionsfähig**, under construction ;)
