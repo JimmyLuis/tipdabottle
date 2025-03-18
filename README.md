@@ -53,7 +53,7 @@ tipdabottle ist ein Getränkebuchungssystem für Vereine, Organisationen oder ge
 | ++1 | AA-B4 | Mitglieder können ihren Schuldbetrag digital begleichen. | ❌|
 
 ## Datenmodell
-![image](https://github.com/user-attachments/assets/90b73584-08f4-4835-bae3-1cfaf92ad6ed)
+![image](https://github.com/user-attachments/assets/7f1e1a97-7f4f-4ef8-a547-4d43d819ff3d)
 Das ER-Modell beschreibt das Bestellsystem, in dem Mitglieder Bestellungen aufgeben, die aus Produkten bestehen.
 
 Mitglieder (Customer) haben eine 1:N-Beziehung zu Bestellungen (Order), da ein Kunde mehrere Bestellungen aufgeben kann.
