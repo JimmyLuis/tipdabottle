@@ -4,8 +4,11 @@ tipdabottle ist ein Getränkebuchungssystem für Vereine, Organisationen oder ge
 > Dieses Projekt wird von mir hauptsächlich in meiner Freizeit entwickelt. Der momentane Projektstatus: **nicht funktionsfähig**, under construction ;)
 > 🚧
 
+# Projektstatus
+> under construction
+
 # Inhalt
-- [Planung](#planung)
+- [Planung und Aufbau](#planung-und-aufbau)
   - [Anforderungen](#anforderungen)
   - [Datenmodell](#datenmodell)
   - [Technologie Stack](#technologie-stack)
@@ -18,37 +21,36 @@ tipdabottle ist ein Getränkebuchungssystem für Vereine, Organisationen oder ge
     - [Flussdiagramme](#flussdiagramme)
     - [Sequenzdiagramme](#sequenzdiagramme)
   - [Externe Tools](#externe-tools)
-# Planung
+# Planung und Aufbau
 ## Anforderungen
-| Priorität  | Kürzel | Anforderung |
-|-------|------|---------------------------|
-| Must | M-M1 | Mitglieder können verschiedene Artikel auf ihre Rechnung hinzufügen. |
-| Must | M-M2 | Mitglieder können ihre Getränkeschulden durch einen Administrator begleichen lassen. |
-| Must | M-M3 | Mitglieder können verschiedene Artikel auf eine gemeinschaftliche Rechnung hinzufügen. |
-| Must | M-M4 | Mitglieder können ihre Schulden einsehen. |
-| Must | M-A1 | Administratoren können über ein Passwort Schulden von Mitgliedern begleichen. |
-||
-| Should | S-M5 | Mitglieder werden daran erinnert, wenn sie einen gewissen Schuldbetrag überschreiten. |
-| Should | S-M6 | Mitglieder werden gesprerrt, wenn sie einen gewissen Schuldbetrag überschreiten. |
-| Should | S-M7 | Mitglieder können ihre letzen Buchungen einsehen. |
-| Should | S-A2 | Administratoren können Mitglieder oder Gemeinschaftskonten anlegen. |
-| Should | S-A3 | Administratoren können Mitglieder oder Gemeinschaftskonten sperren. |
-| Should | S-A4 | Administratoren können Mitglieder oder Gemeinschaftskonten löschen. |
-| Should | S-A5 | Administratoren können Mitglieder oder Gemeinschaftskonten editieren. |
-| Should | S-M8 | Mitglieder können individuelle Rechnungen erstellen. |
-| Should | S-C1 | Das System kann auf mehreren Endgeräten verwendet werden. |
-||
-| Could | C-B1 | Eine Schuldenübersicht kann angezeigt, gefiltert und sortiert werden. |
-| Could | C-B2 | Eine Bilanz kann angezeigt werden. |
-| Could | C-B3 | Zahlbereitschaft, -verlauf und verhalten der Mitglieder kann ermittelt werden. |
-||
-| Nicetohave | N-A6 | Administratoren können ein Sortiment anlegen. |
-| Nicetohave | N-A7 | Administratoren können ein Sortiment bearbeiten. |
-| Nicetohave | N-A8 | Administratoren bekommen automatisch generierte Liste für den nächsten Einkauf. |
-| Nicetohave | N-C1 | Das System ist über öffentliche Netzwerke zugänglich. |
-||
-| ++1 | AA-B4 | Mitglieder können ihren Schuldbetrag digital begleichen. |
-
+| Priorität  | Kürzel | Anforderung | Status |
+|-------|------|---------------------------|-|
+| Must | M-M1 | Mitglieder können verschiedene Artikel auf ihre Rechnung hinzufügen. | ❌|
+| Must | M-M2 | Mitglieder können ihre Getränkeschulden durch einen Administrator begleichen lassen. | ❌|
+| Must | M-M3 | Mitglieder können verschiedene Artikel auf eine gemeinschaftliche Rechnung hinzufügen. | ❌|
+| Must | M-M4 | Mitglieder können ihre Schulden einsehen. | ❌|
+| Must | M-A1 | Administratoren können über ein Passwort Schulden von Mitgliedern begleichen. | ❌|
+|| |
+| Should | S-M5 | Mitglieder werden daran erinnert, wenn sie einen gewissen Schuldbetrag überschreiten. | ❌|
+| Should | S-M6 | Mitglieder werden gesprerrt, wenn sie einen gewissen Schuldbetrag überschreiten. | ❌|
+| Should | S-M7 | Mitglieder können ihre letzen Buchungen einsehen. | ❌|
+| Should | S-A2 | Administratoren können Mitglieder oder Gemeinschaftskonten anlegen. | ❌|
+| Should | S-A3 | Administratoren können Mitglieder oder Gemeinschaftskonten sperren. | ❌|
+| Should | S-A4 | Administratoren können Mitglieder oder Gemeinschaftskonten löschen. | ❌|
+| Should | S-A5 | Administratoren können Mitglieder oder Gemeinschaftskonten editieren. | ❌|
+| Should | S-M8 | Mitglieder können individuelle Rechnungen erstellen. | ❌|
+| Should | S-C1 | Das System kann auf mehreren Endgeräten verwendet werden. | ❌|
+|| |
+| Could | C-B1 | Eine Schuldenübersicht kann angezeigt, gefiltert und sortiert werden. | ❌|
+| Could | C-B2 | Eine Bilanz kann angezeigt werden. | ❌|
+| Could | C-B3 | Zahlbereitschaft, -verlauf und verhalten der Mitglieder kann ermittelt werden. | ❌|
+|| |
+| Nicetohave | N-A6 | Administratoren können ein Sortiment anlegen. | ❌|
+| Nicetohave | N-A7 | Administratoren können ein Sortiment bearbeiten. | ❌|
+| Nicetohave | N-A8 | Administratoren bekommen automatisch generierte Liste für den nächsten Einkauf. | ❌|
+| Nicetohave | N-C1 | Das System ist über öffentliche Netzwerke zugänglich. | ❌|
+|| |
+| ++1 | AA-B4 | Mitglieder können ihren Schuldbetrag digital begleichen. | ❌|
 
 ## Datenmodell
 ![image](https://github.com/user-attachments/assets/90b73584-08f4-4835-bae3-1cfaf92ad6ed)
@@ -61,12 +63,23 @@ Wichtig: Bestellungen enthalten nur Produkte, keine Container – die Container 
 
 ## Technologie Stack
 ### Frontend
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=AEDDFF)
 ### Backend
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ### Datenbank
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
 ## UI
 ### MockUps
 ## Architektur
 ### Flussdiagramme
 ### Sequenzdiagramme
-## Externe Tools
+# Installation & Setup
+# Externe Tools
 [miroboard](https://miro.com/app/board/uXjVIOwNnL4=/?share_link_id=971222298874)
+# Mitwirken
+Falls du Ideen hast oder mithelfen möchtest, gerne einen Pull Request oder ein Issue erstellen!
