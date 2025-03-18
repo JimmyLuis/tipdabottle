@@ -75,6 +75,16 @@ Wichtig: Bestellungen enthalten nur Produkte, keine Container – die Container 
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
 ## UI
 ### MockUps
+- Main Page
+  
+  ![image](https://github.com/user-attachments/assets/1fbfed75-2894-4c3a-af7a-e5f7672aa214)
+- Main Page Popup
+  
+  ![image](https://github.com/user-attachments/assets/fe084452-0f95-4d93-aa68-abdad2480a95)
+- Main Page Popup Selection (click numbers to remove item)
+
+  ![image](https://github.com/user-attachments/assets/0536fca9-4b0e-48fe-af9e-aac4a9ee37a8)
+
 ## Architektur
 ### Flussdiagramme
 ### Sequenzdiagramme
