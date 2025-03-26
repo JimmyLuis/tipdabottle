@@ -86,8 +86,13 @@ Wichtig: Bestellungen enthalten nur Produkte, keine Container – die Container 
   ![image](https://github.com/user-attachments/assets/0536fca9-4b0e-48fe-af9e-aac4a9ee37a8)
 
 ## Architektur
-### Flussdiagramme
-### Sequenzdiagramme
+### Statisches Modell
+- Komponentendiagramm
+- Verteilungsdiagramm
+- Klassendiagramm
+### Dynamisches Modell
+- Flussdiagramme
+- Sequenzdiagramme
 # Installation & Setup
 # Externe Tools
 [miroboard](https://miro.com/app/board/uXjVIOwNnL4=/?share_link_id=971222298874)
