@@ -40,6 +40,8 @@ tipdabottle ist ein Getränkebuchungssystem für Vereine, Organisationen oder ge
 | Should | S-A5 | Administratoren können Mitglieder oder Gemeinschaftskonten editieren. | ❌|
 | Should | S-M8 | Mitglieder können individuelle Rechnungen erstellen. | ❌|
 | Should | S-C1 | Das System kann auf mehreren Endgeräten verwendet werden. | ❌|
+| Should | S-C2 | Gemeinschaftskonten können pro Mitglied limitiert werden | ❌|
+| Should | S-C3 | Es kann ein Artikel auf verschiedene Mitglieder gebucht werden (Runde auf Mitglieder aufgeteilt) | ❌|
 || |
 | Could | C-B1 | Eine Schuldenübersicht kann angezeigt, gefiltert und sortiert werden. | ❌|
 | Could | C-B2 | Eine Bilanz kann angezeigt werden. | ❌|
