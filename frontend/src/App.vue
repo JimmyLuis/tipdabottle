@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    <default></default>
+    <index></index>
   </v-app>
 </template>
 
 <script setup>
-  //
-import Default from "@/layouts/default.vue";
+  import Index from "@/pages/index.vue";
 </script>
