@@ -1,4 +1,4 @@
-package de.beckhoffluis.tipdabottle.backend;
+package de.lbeck.tipdabottle;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
