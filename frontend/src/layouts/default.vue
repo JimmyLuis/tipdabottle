@@ -1,14 +1,15 @@
 <template>
-  <v-main>
-    <NavigationBar />
-    <member-grid class="mt-5"></member-grid>
-    <purchase-card></purchase-card>
-  </v-main>
+  <v-app>
+    <NavigationBar/>
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
   //
-import NavigationBar from "@/components/NavigationBar.vue";
+import NavigationBar from "@/components/navigation/NavigationBar.vue";
   import MemberGrid from "@/components/MemberGrid.vue";
   import PurchaseCard from "@/components/PurchaseCard.vue";
 </script>
