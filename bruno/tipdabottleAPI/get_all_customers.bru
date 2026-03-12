@@ -1,0 +1,15 @@
+meta {
+  name: get_all_customers
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/customer
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

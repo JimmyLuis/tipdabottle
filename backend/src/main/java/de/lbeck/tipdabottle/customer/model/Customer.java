@@ -27,5 +27,7 @@ public class Customer {
     private boolean locked;
     @Column
     private boolean community;
+    @Column
+    private boolean activeProfile;
 
 }

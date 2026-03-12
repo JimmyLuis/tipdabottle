@@ -21,7 +21,7 @@ public class Product {
     @Column
     private String description;
     @Column
-    private String price;
+    private double price;
     @Column
     private ProductCategory category;
     @Column
