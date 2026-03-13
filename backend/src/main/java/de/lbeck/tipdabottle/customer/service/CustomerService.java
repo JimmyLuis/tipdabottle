@@ -1,8 +1,12 @@
 package de.lbeck.tipdabottle.customer.service;
 
-import de.lbeck.tipdabottle.container.repository.ContainerRepository;
+import de.lbeck.tipdabottle.customer.dto.CustomerCreateDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerMapper;
+import de.lbeck.tipdabottle.customer.dto.CustomerUpdateDTO;
+import de.lbeck.tipdabottle.customer.exception.CustomerNotFoundException;
+import de.lbeck.tipdabottle.customer.exception.EmailAlreadyExistsException;
+import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +30,37 @@ public class CustomerService {
             customerDTOs.add(customerMapper.toDTO(customer));
         });
         return customerDTOs;
+    }
+
+    public CustomerDTO getCustomerById(long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
+        return customerMapper.toDTO(customer);
+    }
+
+    public CustomerDTO getCustomerEMail(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with email " + email + " not found"));
+        return customerMapper.toDTO(customer);
+    }
+
+    public CustomerDTO createCustomer(CustomerCreateDTO customerCreateDTO) {
+        Customer customer = customerMapper.toEntity(customerCreateDTO);
+        customer = customerRepository.save(customer);
+        return customerMapper.toDTO(customer);
+    }
+    public CustomerDTO updateCustomer(long id, CustomerUpdateDTO customerUpdateDTO) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
+        Customer finalCustomer = customer;
+        customerRepository.findByEmail(customerUpdateDTO.email())
+                .ifPresent(mailCustomer -> {
+                    if (mailCustomer.getEmail().equals(finalCustomer.getEmail())) {
+                        throw new EmailAlreadyExistsException("Customer with email " + mailCustomer.getEmail() + " already exists!");
+                    }
+                });
+        customer = customerMapper.toEntity(customerUpdateDTO, customer);
+        customer = customerRepository.save(customer);
+        return customerMapper.toDTO(customer);
     }
 }
