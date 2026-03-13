@@ -16,12 +16,13 @@ public class Container {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     private Product product;
     @Column
     private String name;
     @Column
     private String description;
+    @Enumerated(EnumType.STRING)
     @Column
     private ProductCategory category;
     @Column

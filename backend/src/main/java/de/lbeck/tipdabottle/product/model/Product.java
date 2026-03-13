@@ -22,11 +22,12 @@ public class Product {
     private String description;
     @Column
     private double price;
+    @Enumerated(EnumType.STRING)
     @Column
     private ProductCategory category;
     @Column
     private int stock;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     private Container container;
 
 }
