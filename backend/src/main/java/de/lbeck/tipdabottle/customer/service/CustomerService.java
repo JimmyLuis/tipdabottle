@@ -32,7 +32,7 @@ public class CustomerService {
         return customerDTOs;
     }
 
-    public CustomerDTO getCustomerById(long id) {
+    public CustomerDTO getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
         return customerMapper.toDTO(customer);
@@ -46,10 +46,15 @@ public class CustomerService {
 
     public CustomerDTO createCustomer(CustomerCreateDTO customerCreateDTO) {
         Customer customer = customerMapper.toEntity(customerCreateDTO);
+        customerRepository.findByEmail(customerCreateDTO.email())
+                .ifPresent(mailCustomer -> {
+                    throw new EmailAlreadyExistsException("Customer with email " + mailCustomer.getEmail() + " already exists!");
+                });
         customer = customerRepository.save(customer);
         return customerMapper.toDTO(customer);
     }
-    public CustomerDTO updateCustomer(long id, CustomerUpdateDTO customerUpdateDTO) {
+
+    public CustomerDTO updateCustomer(Long id, CustomerUpdateDTO customerUpdateDTO) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
         Customer finalCustomer = customer;
@@ -63,4 +68,5 @@ public class CustomerService {
         customer = customerRepository.save(customer);
         return customerMapper.toDTO(customer);
     }
+
 }

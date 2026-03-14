@@ -13,7 +13,7 @@ VALUES (4,'Lisa','Becker','lisa@example.com',10.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (5,'Paul','Wagner','paul@example.com',5.0,false,true,true);
-
+ALTER TABLE customer ALTER COLUMN id RESTART WITH 6;
 
 
 -- CONTAINER
@@ -66,6 +66,8 @@ VALUES (15, 'Energy Drink Kasten','Energy Drink Dosen', 'NON_ALCOHOL',24,4);
 INSERT INTO container (id, name, description, category, capacity, stock)
 VALUES (16, 'Mate Kasten','Club Mate Flaschen', 'NON_ALCOHOL',20,5);
 
+ALTER TABLE container ALTER COLUMN id RESTART WITH 17;
+
 -- PRODUCT
 INSERT INTO product (id, name, description, price, category, stock, container_id)
 VALUES (1,'Cola','0.33L Flasche',1.00,'NON_ALCOHOL',100,1);
@@ -115,6 +117,7 @@ VALUES (15,'Energy Drink','250ml Dose',1.80,'NON_ALCOHOL',96,15);
 
 INSERT INTO product (id, name, description, price, category, stock, container_id)
 VALUES (16,'Club Mate','0.5L Flasche',1.40,'NON_ALCOHOL',100,16);
+ALTER TABLE product ALTER COLUMN id RESTART WITH 17;
 
 -- Container mit Product verbinden
 UPDATE container SET product_id = 1 WHERE id = 1;
@@ -149,3 +152,5 @@ VALUES (4,2,4,4,'2026-01-02',4.00,2);
 
 INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
 VALUES (5,3,5,5,'2026-01-03',8.50,1);
+
+ALTER TABLE purchase ALTER COLUMN id RESTART WITH 6;

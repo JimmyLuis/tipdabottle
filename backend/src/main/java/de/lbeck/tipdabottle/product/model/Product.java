@@ -3,19 +3,18 @@ package de.lbeck.tipdabottle.product.model;
 import de.lbeck.tipdabottle.common.enums.ProductCategory;
 import de.lbeck.tipdabottle.container.model.Container;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column
     private String name;
     @Column
@@ -27,6 +26,7 @@ public class Product {
     private ProductCategory category;
     @Column
     private int stock;
+
     @OneToOne(cascade = CascadeType.DETACH)
     private Container container;
 

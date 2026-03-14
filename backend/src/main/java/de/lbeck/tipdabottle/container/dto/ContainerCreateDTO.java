@@ -1,11 +1,8 @@
 package de.lbeck.tipdabottle.container.dto;
 
-
 import de.lbeck.tipdabottle.common.enums.ProductCategory;
-import de.lbeck.tipdabottle.product.dto.ProductDTO;
 
-public record ContainerDTO(
-        Long id,
+public record ContainerCreateDTO(
         String name,
         String description,
         ProductCategory category,

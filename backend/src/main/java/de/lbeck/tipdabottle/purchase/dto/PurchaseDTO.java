@@ -6,8 +6,8 @@ import de.lbeck.tipdabottle.product.dto.ProductDTO;
 import java.sql.Date;
 
 public record PurchaseDTO(
-        long id,
-        long purchaseGroupId,
+        Long id,
+        Long purchaseGroupId,
         ProductDTO product,
         CustomerDTO customer,
         Date creationDate,

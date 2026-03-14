@@ -1,11 +1,10 @@
 package de.lbeck.tipdabottle.product.controller;
 
+import de.lbeck.tipdabottle.product.dto.ProductCreateDTO;
 import de.lbeck.tipdabottle.product.dto.ProductDTO;
 import de.lbeck.tipdabottle.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +21,16 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> getAllProducts(){
         return productService.getAllProducts();
+    }
+
+    @GetMapping("/{id}")
+    public ProductDTO getProductById(@PathVariable Long id){
+        return productService.getProductById(id);
+    }
+
+    @PostMapping
+    public ProductDTO createProductWithContainer(@RequestBody ProductCreateDTO productCreateDTO){
+        return productService.createProductWithContainer(productCreateDTO);
     }
 
 }
