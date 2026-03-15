@@ -1,7 +1,7 @@
 info:
   name: GET container
   type: http
-  seq: 4
+  seq: 13
 
 http:
   method: GET

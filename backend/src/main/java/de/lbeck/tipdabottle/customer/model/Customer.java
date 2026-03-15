@@ -1,6 +1,7 @@
 package de.lbeck.tipdabottle.customer.model;
 
 
+import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

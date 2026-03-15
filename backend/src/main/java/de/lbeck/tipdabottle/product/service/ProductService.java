@@ -5,6 +5,7 @@ import de.lbeck.tipdabottle.container.repository.ContainerRepository;
 import de.lbeck.tipdabottle.product.dto.ProductCreateDTO;
 import de.lbeck.tipdabottle.product.dto.ProductDTO;
 import de.lbeck.tipdabottle.product.dto.ProductMapper;
+import de.lbeck.tipdabottle.product.dto.ProductUpdateDTO;
 import de.lbeck.tipdabottle.product.exception.ProductNotFoundException;
 import de.lbeck.tipdabottle.product.model.Product;
 import de.lbeck.tipdabottle.product.repository.ProductRepository;
@@ -50,5 +51,16 @@ public class ProductService {
         return productMapper.toDTO(product);
     }
 
+    public ProductDTO updateProduct(Long id, ProductUpdateDTO productUpdateDTO){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
+        product = productMapper.toEntity(productUpdateDTO, product);
+        product = productRepository.save(product);
+        return productMapper.toDTO(product);
+    }
+
+    public ProductDTO updateProductAndContainer(Product product){
+        return productMapper.toDTO(productRepository.save(product));
+    }
 
 }

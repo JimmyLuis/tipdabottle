@@ -138,19 +138,38 @@ UPDATE container SET product_id = 15 WHERE id = 15;
 UPDATE container SET product_id = 16 WHERE id = 16;
 
 -- PURCHASE
-INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
-VALUES (1,1,1,1,'2026-01-01',1.50,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
+VALUES (1,1,1,'2026-01-01',1.50,1);
 
-INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
-VALUES (2,1,2,2,'2026-01-01',3.00,2);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
+VALUES (2,2,2,'2026-01-01',3.00,2);
 
-INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
-VALUES (3,2,3,3,'2026-01-02',1.20,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
+VALUES (3,3,3,'2026-01-02',1.20,1);
 
-INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
-VALUES (4,2,4,4,'2026-01-02',4.00,2);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
+VALUES (4,4,4,'2026-01-02',4.00,2);
 
-INSERT INTO purchase (id, purchase_group_id, product_id, customer_id, creation_date, worth, quantity)
-VALUES (5,3,5,5,'2026-01-03',8.50,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
+VALUES (5,5,5,'2026-01-03',8.50,1);
 
 ALTER TABLE purchase ALTER COLUMN id RESTART WITH 6;
+
+-- PURCHASE GROUP
+INSERT INTO purchase_group (id)
+VALUES (1);
+
+INSERT INTO purchase_group (id)
+VALUES (2);
+
+INSERT INTO purchase_group (id)
+VALUES (3);
+
+ALTER TABLE purchase_group ALTER COLUMN id RESTART WITH 4;
+
+
+UPDATE purchase SET purchase_group_id = 1 WHERE id = 1;
+UPDATE purchase SET purchase_group_id = 2 WHERE id = 2;
+UPDATE purchase SET purchase_group_id = 3 WHERE id = 3;
+UPDATE purchase SET purchase_group_id = 1 WHERE id = 4;
+UPDATE purchase SET purchase_group_id = 2 WHERE id = 5;

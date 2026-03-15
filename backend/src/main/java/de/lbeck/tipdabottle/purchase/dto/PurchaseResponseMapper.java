@@ -4,10 +4,13 @@ import de.lbeck.tipdabottle.customer.dto.CustomerMapper;
 import de.lbeck.tipdabottle.product.dto.ProductMapper;
 import de.lbeck.tipdabottle.purchase.model.Purchase;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {CustomerMapper.class, ProductMapper.class, PurchaseGroupMapper.class})
-public interface PurchaseMapper {
-    PurchaseDTO toDTO(Purchase purchase);
-    Purchase toEntity(PurchaseDTO purchaseDTO);
+public interface PurchaseResponseMapper {
+
+    @Mapping(source = "customer.id", target = "customerId")
+    @Mapping(source = "purchaseGroup.id", target = "purchaseGroupId")
+    PurchaseCreateResponseDTO toDTO(Purchase purchase);
 
 }

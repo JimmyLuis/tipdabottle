@@ -2,18 +2,15 @@ package de.lbeck.tipdabottle.purchase.dto;
 
 import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
 import de.lbeck.tipdabottle.product.dto.ProductDTO;
-import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
-public record PurchaseDTO(
+public record PurchaseCreateResponseDTO(
         Long id,
-        PurchaseGroupDTO purchaseGroup,
+        Long purchaseGroupId,
         ProductDTO product,
-        CustomerDTO customer,
+        Long customerId,
         Timestamp creationTime,
         double worth,
-        int quantity
-) {
+        int quantity) {
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -17,8 +18,9 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
-    private Long purchaseGroupId;
+    @ManyToOne
+    @JoinColumn(name = "purchaseGroup_id")
+    private PurchaseGroup purchaseGroup;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -26,7 +28,7 @@ public class Purchase {
     @JoinColumn(name = "customer_id")
     private Customer customer;
     @Column
-    private Date creationDate;
+    private Timestamp creationTime;
     @Column
     private double worth;
     @Column

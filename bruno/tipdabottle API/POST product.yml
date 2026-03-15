@@ -1,7 +1,7 @@
 info:
   name: POST product
   type: http
-  seq: 6
+  seq: 2
 
 http:
   method: POST
@@ -10,17 +10,17 @@ http:
     type: json
     data: |-
       {
-        "name": "Testprodult",
-        "description": "Testbeschreibung",
-        "price": 2.00,
+        "name": "",
+        "description": "",
+        "price": 0,
         "category": "SNACK",
-        "stock": 100,
+        "stock": 0,
         "container": {
-          "name": "Testproduktcontainer",
-          "description": "Testbeschreibung container",
+          "name": "",
+          "description": "",
           "category": "SNACK",
-          "capacity": 12,
-          "stock": 2
+          "capacity": 0,
+          "stock": 0
         }
       }
   auth: inherit

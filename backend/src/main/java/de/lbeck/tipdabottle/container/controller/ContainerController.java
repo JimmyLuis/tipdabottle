@@ -20,7 +20,7 @@ public class ContainerController {
     }
 
     @GetMapping
-    public List<ContainerDTO> getAllCustomers() {
+    public List<ContainerDTO> getAllContainers() {
         return containerService.getAllContainers();
     }
 }

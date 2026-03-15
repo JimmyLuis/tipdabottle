@@ -69,4 +69,8 @@ public class CustomerService {
         return customerMapper.toDTO(customer);
     }
 
+    public CustomerDTO updateCustomer(Customer customer){
+        return customerMapper.toDTO(customerRepository.save(customer));
+    }
+
 }
