@@ -3,4 +3,4 @@
 /.idea/
 /out/
 /*.iml
-.env
+/frontend/.env
