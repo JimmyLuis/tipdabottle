@@ -10,6 +10,4 @@
 <script setup>
   //
 import NavigationBar from "@/components/navigation/NavigationBar.vue";
-  import MemberGrid from "@/components/MemberGrid.vue";
-  import PurchaseCard from "@/components/PurchaseCard.vue";
 </script>

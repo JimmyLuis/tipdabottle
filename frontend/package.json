@@ -12,6 +12,7 @@
   "dependencies": {
     "@mdi/font": "7.4.47",
     "esbuild": "^0.27.3",
+    "prettier": "^3.8.1",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
