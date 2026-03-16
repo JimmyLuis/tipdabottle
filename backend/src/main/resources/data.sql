@@ -138,20 +138,20 @@ UPDATE container SET product_id = 15 WHERE id = 15;
 UPDATE container SET product_id = 16 WHERE id = 16;
 
 -- PURCHASE
-INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
-VALUES (1,1,1,'2026-01-01',1.50,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity, reversed)
+VALUES (1,1,1,'2026-01-01',1.50,1, false);
 
-INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
-VALUES (2,2,2,'2026-01-01',3.00,2);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity, reversed)
+VALUES (2,2,2,'2026-01-01',3.00,2, false);
 
-INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
-VALUES (3,3,3,'2026-01-02',1.20,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity, reversed)
+VALUES (3,3,3,'2026-01-02',1.20,1, false);
 
-INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
-VALUES (4,4,4,'2026-01-02',4.00,2);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity, reversed)
+VALUES (4,4,4,'2026-01-02',4.00,2, false);
 
-INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity)
-VALUES (5,5,5,'2026-01-03',8.50,1);
+INSERT INTO purchase (id, product_id, customer_id, creation_time, worth, quantity, reversed)
+VALUES (5,5,5,'2026-01-03',8.50,1, false);
 
 ALTER TABLE purchase ALTER COLUMN id RESTART WITH 6;
 

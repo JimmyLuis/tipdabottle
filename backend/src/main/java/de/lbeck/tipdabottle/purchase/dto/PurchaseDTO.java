@@ -14,6 +14,8 @@ public record PurchaseDTO(
         CustomerDTO customer,
         Timestamp creationTime,
         double worth,
-        int quantity
+        int quantity,
+        Boolean reversed,
+        Long reversedReverence
 ) {
 }

@@ -43,7 +43,7 @@ public class ProductService {
     public ProductDTO createProductWithContainer(ProductCreateDTO productCreateDTO){
         Product product = productMapper.toEntity(productCreateDTO);
         Container container = product.getContainer();
-        container= containerRepository.save(container);
+        container = containerRepository.save(container);
         product.setContainer(container);
         product = productRepository.save(product);
         container.setProduct(product);

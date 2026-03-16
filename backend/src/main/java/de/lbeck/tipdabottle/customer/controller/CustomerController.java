@@ -1,10 +1,12 @@
 package de.lbeck.tipdabottle.customer.controller;
 
+import de.lbeck.tipdabottle.customer.dto.CustomerBalanceDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerCreateDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerUpdateDTO;
 import de.lbeck.tipdabottle.customer.service.CustomerService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -24,8 +26,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDTO> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public List<CustomerDTO> getAllCustomers(@RequestParam (defaultValue = "0") Boolean listInactiveProfiles) {
+        return customerService.getAllCustomers(listInactiveProfiles);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +43,11 @@ public class CustomerController {
     @PostMapping
     public CustomerDTO createCustomer(@Valid @RequestBody CustomerCreateDTO customerCreateDTO){
         return customerService.createCustomer(customerCreateDTO);
+    }
+
+    @PostMapping("/{id}/balance")
+    public CustomerDTO changeCustomerBalance(@PathVariable Long id, @Valid @RequestBody CustomerBalanceDTO customerBalanceDTO){
+        return customerService.changeCustomerBalance(id, customerBalanceDTO);
     }
 
     @PutMapping("/{id}")

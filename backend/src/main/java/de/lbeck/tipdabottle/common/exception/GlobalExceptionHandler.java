@@ -1,5 +1,6 @@
 package de.lbeck.tipdabottle.common.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -39,13 +40,19 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
-
         Map<String, String> errors = new HashMap<>();
-
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
+        return ResponseEntity.badRequest().body(errors);
+    }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleValidationErrors(ConstraintViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(error ->
+                errors.put(Arrays.stream(error.getPropertyPath().toString().split("\\.")).toList().getLast(), error.getMessage())
+        );
         return ResponseEntity.badRequest().body(errors);
     }
 

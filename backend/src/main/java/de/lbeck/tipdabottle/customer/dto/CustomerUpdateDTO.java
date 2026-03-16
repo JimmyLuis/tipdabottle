@@ -10,7 +10,7 @@ public record CustomerUpdateDTO(
         String lastName,
         @Email
         String email,
-        boolean community,
-        boolean activeProfile
+        Boolean community,
+        Boolean activeProfile
 ) {
 }

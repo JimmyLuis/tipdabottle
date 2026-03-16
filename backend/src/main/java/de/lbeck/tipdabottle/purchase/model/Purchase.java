@@ -19,7 +19,7 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "purchaseGroup_id")
+    @JoinColumn(name = "purchase_group_id")
     private PurchaseGroup purchaseGroup;
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -33,5 +33,9 @@ public class Purchase {
     private double worth;
     @Column
     private int quantity;
+    @Column
+    private Boolean reversed;
+    @Column(nullable = true)
+    private Long reversedReverence;
 
 }

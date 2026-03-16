@@ -25,11 +25,11 @@ public class Customer {
     @Column
     private double balance;
     @Column
-    private boolean locked;
+    private Boolean locked;
     @Column
-    private boolean community;
+    private Boolean community;
     @Column
-    private boolean activeProfile;
+    private Boolean activeProfile;
 
 }
 

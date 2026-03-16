@@ -26,7 +26,6 @@ public class Product {
     private ProductCategory category;
     @Column
     private int stock;
-
     @OneToOne(cascade = CascadeType.DETACH)
     private Container container;
 

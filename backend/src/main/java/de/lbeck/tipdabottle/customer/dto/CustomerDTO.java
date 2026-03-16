@@ -6,8 +6,8 @@ public record CustomerDTO(
         String lastName,
         String email,
         double balance,
-        boolean locked,
-        boolean community,
-        boolean activeProfile
+        Boolean locked,
+        Boolean community,
+        Boolean activeProfile
 ) {
 }

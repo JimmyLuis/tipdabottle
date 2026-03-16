@@ -1,10 +1,9 @@
 package de.lbeck.tipdabottle.purchase.controller;
 
 import de.lbeck.tipdabottle.purchase.dto.PurchaseCreateDTO;
-import de.lbeck.tipdabottle.purchase.dto.PurchaseCreateResponseDTO;
+import de.lbeck.tipdabottle.purchase.dto.PurchaseResponseDTO;
 import de.lbeck.tipdabottle.purchase.dto.PurchaseDTO;
-import de.lbeck.tipdabottle.purchase.exception.PurchaseNotFoundException;
-import de.lbeck.tipdabottle.purchase.model.Purchase;
+import de.lbeck.tipdabottle.purchase.dto.PurchaseReverseDTO;
 import de.lbeck.tipdabottle.purchase.service.PurchaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -12,12 +11,11 @@ import org.springframework.data.domain.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/purchase")
+@RequestMapping("/purchases")
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
@@ -27,7 +25,7 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public Page<PurchaseDTO> getAllPurchases(
+    public Page<PurchaseResponseDTO> getAllPurchases(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") @Max(100) int size
     ){
@@ -40,12 +38,12 @@ public class PurchaseController {
     }
 
     @GetMapping("/group/{groupId}")
-    public List<PurchaseDTO> getPurchasesByGroup(@PathVariable Long groupId){
+    public List<PurchaseResponseDTO> getPurchasesByGroup(@PathVariable Long groupId){
         return purchaseService.getPurchasesByGroup(groupId);
     }
 
     @GetMapping("/customer/{customerId}")
-    public Page<PurchaseDTO> getPurchasesByCustomer(
+    public Page<PurchaseResponseDTO> getPurchasesByCustomer(
             @PathVariable Long customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") @Max(100) int size){
@@ -53,7 +51,12 @@ public class PurchaseController {
     }
 
     @PostMapping("/customer/{customerId}")
-    public List<PurchaseCreateResponseDTO> createPurchases(@PathVariable Long customerId, @Valid @RequestBody List<PurchaseCreateDTO> purchaseCreateDTOList){
+    public List<PurchaseResponseDTO> createPurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid PurchaseCreateDTO> purchaseCreateDTOList){
         return purchaseService.createPurchases(customerId, purchaseCreateDTOList);
+    }
+
+    @DeleteMapping("/customer/{customerId}")
+    public List<PurchaseResponseDTO> deletePurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid PurchaseReverseDTO> purchaseReverseDTOList){
+        return purchaseService.reversePurchases(customerId, purchaseReverseDTOList);
     }
 }

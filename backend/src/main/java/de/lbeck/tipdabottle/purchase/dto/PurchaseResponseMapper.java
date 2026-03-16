@@ -11,6 +11,6 @@ public interface PurchaseResponseMapper {
 
     @Mapping(source = "customer.id", target = "customerId")
     @Mapping(source = "purchaseGroup.id", target = "purchaseGroupId")
-    PurchaseCreateResponseDTO toDTO(Purchase purchase);
+    PurchaseResponseDTO toDTO(Purchase purchase);
 
 }

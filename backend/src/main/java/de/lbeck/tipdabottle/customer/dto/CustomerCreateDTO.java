@@ -9,6 +9,6 @@ public record CustomerCreateDTO(
         String lastName,
         @Email
         String email,
-        boolean community
+        Boolean community
 ) {
 }

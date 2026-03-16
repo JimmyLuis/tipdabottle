@@ -10,4 +10,6 @@ public interface PurchaseMapper {
     PurchaseDTO toDTO(Purchase purchase);
     Purchase toEntity(PurchaseDTO purchaseDTO);
 
+    Purchase toEntity(PurchaseReverseDTO purchaseReverseDTO);
+
 }
