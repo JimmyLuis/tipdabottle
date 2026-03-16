@@ -1,6 +1,7 @@
 <script setup>
 import MemberSlot from "@/components/MemberSlot.vue";
 import {onMounted, ref} from "vue";
+import {apiFetch} from "@/api/http.js";
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -8,22 +9,14 @@ const customers = ref([]);
 const customersDummy = ref([]);
 
 
-onMounted(() => {
+onMounted(async () => {
   for (let i = 0; i < 10; i++) {
     let customer = {
       id: i
     }
     customersDummy.value.push(customer);
   }
-  console.log(customers.value.length)
-  fetch(`${apiUrl}/customers`)
-    .then(response => response.json())
-    .then(data => {
-      customers.value = data;
-    })
-    .catch(error => {
-      console.error("Fehler:", error);
-    });
+  customers.value = await apiFetch("/customers")
 })
 
 

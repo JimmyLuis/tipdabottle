@@ -14,6 +14,7 @@
     "esbuild": "^0.27.3",
     "prettier": "^3.8.1",
     "roboto-fontface": "*",
+    "unplugin-auto-import": "^21.0.0",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },
@@ -29,7 +30,6 @@
     "pinia": "^2.1.7",
     "sass": "1.77.8",
     "sass-embedded": "^1.77.8",
-    "unplugin-auto-import": "^0.17.6",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.27.2",
     "unplugin-vue-router": "^0.10.0",
