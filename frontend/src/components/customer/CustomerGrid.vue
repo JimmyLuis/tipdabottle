@@ -1,12 +1,16 @@
 <script setup>
-import MemberSlot from "@/components/MemberSlot.vue";
+import CustomerSlot from "@/components/customer/CustomerSlot.vue";
 import {onMounted, ref} from "vue";
 import {apiFetch} from "@/api/http.js";
+import {getAllCustomers} from "@/api/customerApi.js";
+import {getAllProducts} from "@/api/productApi.js";
 
-const apiUrl = import.meta.env.VITE_API_URL
 
 const customers = ref([]);
 const customersDummy = ref([]);
+
+const products = ref([])
+
 
 
 onMounted(async () => {
@@ -16,7 +20,8 @@ onMounted(async () => {
     }
     customersDummy.value.push(customer);
   }
-  customers.value = await apiFetch("/customers")
+  customers.value = await getAllCustomers();
+  products.value = await getAllProducts();
 })
 
 
@@ -35,7 +40,7 @@ onMounted(async () => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <MemberSlot v-if="customers" :customer />
+          <CustomerSlot v-if="customers" :customer :products />
         </v-sheet>
       </v-col>
     </v-row>

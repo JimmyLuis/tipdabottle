@@ -1,10 +1,8 @@
 <template>
-  <member-grid class="mt-5"></member-grid>
-  <purchase-card></purchase-card>
+  <CustomerGrid class="mt-5"></CustomerGrid>
 </template>
 
 <script setup>
 
-import MemberGrid from "@/components/MemberGrid.vue";
-import PurchaseCard from "@/components/PurchaseCard.vue";
+import CustomerGrid from "@/components/customer/CustomerGrid.vue";
 </script>
