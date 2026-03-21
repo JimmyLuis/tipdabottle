@@ -9,7 +9,7 @@ import router from "@/router/index.js";
     <v-app-bar-title class="font-weight-bold pl-5" @click="router.push('/')">tipdabottle</v-app-bar-title>
 
     <template v-slot:append>
-      <v-btn class="border rounded-xl mr-3" @click="router.push('/purchase-history')">
+      <v-btn class="rounded-xl mr-3" variant="outlined" @click="router.push('/purchase-history')">
         <span class="pr-2">Bestellhistorie</span>
         <v-icon size="25" icon="mdi-receipt-text-clock-outline"></v-icon>
       </v-btn>

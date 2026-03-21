@@ -74,16 +74,17 @@ function submitPurchase(){
               {{props.customer?.firstName}}
               <v-card-subtitle>
                 <div class="d-flex justify-start align-center pb-1">
-                  <h3 class="pr-5"> Saldo: </h3>
-                  <h3>{{props.customer.balance.toFixed(2)}} €</h3>
-                </div>
-                <div class="d-flex justify-start align-center">
+                  <div class="d-flex">
+                    <h3 class="pr-3"> Saldo: </h3>
+                    <div class="d-inline">
+                      <h3 class="justify-end d-flex">{{props.customer.balance.toFixed(2)}} €</h3>
+                      <v-slide-x-transition hide-on-leave>
+                        <h3 v-if="purchaseWorth > 0.0" class="text-red-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h3>
+                      </v-slide-x-transition>
+                      <h3 v-if="!purchaseWorth > 0.0" class="text-transparent">- {{purchaseWorth.toFixed(2)}} €</h3>
+                    </div>
+                  </div>
                   <v-spacer></v-spacer>
-                  <v-slide-x-transition hide-on-leave>
-                    <h3 v-if="purchaseWorth > 0.0" class="text-red-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h3>
-                  </v-slide-x-transition>
-                  <h3 v-if="!purchaseWorth > 0.0" class="text-transparent">- {{purchaseWorth.toFixed(2)}} €</h3>
-
                 </div>
               </v-card-subtitle>
             </div>

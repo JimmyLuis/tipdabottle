@@ -30,9 +30,9 @@ const isActive = ref(false);
 const submitPurchase = async function(submitProducts) {
   await purchaseProducts(props.customer.id, submitProducts.values().toArray())
     .then(res => {
-      if (res.ok)
-      notify.set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
-    });
+      if (res)
+        notify.set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
+    })
   isActive.value = false
   emit('refreshCustomer', props.customer)
 

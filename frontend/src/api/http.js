@@ -12,7 +12,7 @@ export async function apiFetch(url, options = {}) {
     if (!response.ok) {
       errorStore.set(data || "Server error")
       new Error(data.message)
-      return response
+      return null
     }
 
     return data
