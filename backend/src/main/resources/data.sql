@@ -1,93 +1,93 @@
 -- CUSTOMER
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (1,'Max','Mustermann','max@example.com',20.0,false,true,true);
+VALUES (1,'Max','Mustermann','max@example.com',20.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (2,'Anna','Schmidt','anna@example.com',15.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (3,'Tom','Müller','tom@example.com',30.0,false,true,true);
+VALUES (3,'Tom','Müller','tom@example.com',30.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (4,'Lisa','Becker','lisa@example.com',10.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (5,'Paul','Wagner','paul@example.com',5.0,false,true,true);
+VALUES (5,'Paul','Wagner','paul@example.com',5.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (6,'Lukas','Fischer','lukas@example.com',12.0,false,true,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (7,'Sophie','Hoffmann','sophie@example.com',18.5,false,false,true);
+VALUES (7,'Sophie','Hoffmann','sophie@example.com',18.5,false,true,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (8,'Leon','Schneider','leon@example.com',22.0,false,true,true);
+VALUES (8,'Leon','Schneider','leon@example.com',22.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (9,'Mia','Weber','mia@example.com',14.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (10,'Jonas','Meyer','jonas@example.com',25.0,false,true,true);
+VALUES (10,'Jonas','Meyer','jonas@example.com',25.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (11,'Emma','Schulz','emma@example.com',16.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (12,'Finn','Koch','finn@example.com',19.0,false,true,true);
+VALUES (12,'Finn','Koch','finn@example.com',19.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (13,'Hannah','Richter','hannah@example.com',21.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (14,'Noah','Klein','noah@example.com',11.0,false,true,true);
+VALUES (14,'Noah','Klein','noah@example.com',11.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (15,'Lea','Wolf','lea@example.com',13.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (16,'Ben','Schröder','ben@example.com',17.0,false,true,true);
+VALUES (16,'Ben','Schröder','ben@example.com',17.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (17,'Clara','Neumann','clara@example.com',9.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (18,'Luis','Schwarz','luis@example.com',24.0,false,true,true);
+VALUES (18,'Luis','Schwarz','luis@example.com',24.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (19,'Marie','Zimmermann','marie@example.com',20.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (20,'Felix','Braun','felix@example.com',15.0,false,true,true);
+VALUES (20,'Felix','Braun','felix@example.com',15.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (21,'Laura','Krüger','laura@example.com',12.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (22,'Tim','Hartmann','tim@example.com',18.0,false,true,true);
+VALUES (22,'Tim','Hartmann','tim@example.com',18.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (23,'Lena','Lange','lena@example.com',14.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (24,'David','Schmitt','david@example.com',27.0,false,true,true);
+VALUES (24,'David','Schmitt','david@example.com',27.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (25,'Julia','Werner','julia@example.com',16.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (26,'Niklas','Krause','niklas@example.com',19.5,false,true,true);
+VALUES (26,'Niklas','Krause','niklas@example.com',19.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (27,'Sarah','Meier','sarah@example.com',8.0,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (28,'Tobias','Lehmann','tobias@example.com',22.5,false,true,true);
+VALUES (28,'Tobias','Lehmann','tobias@example.com',22.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
 VALUES (29,'Nina','Kaiser','nina@example.com',11.5,false,false,true);
 
 INSERT INTO customer (id, first_name, last_name, email, balance, locked, community, active_profile)
-VALUES (30,'Daniel','Fuchs','daniel@example.com',26.0,false,true,true);
+VALUES (30,'Daniel','Fuchs','daniel@example.com',26.0,false,false,true);
 ALTER TABLE customer ALTER COLUMN id RESTART WITH 31;
 
 

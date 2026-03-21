@@ -27,7 +27,6 @@ onBeforeUnmount(() => {
 const bool = ref()
 watch(props.product, (value, oldValue) => {
   bool.value = props.product.index > 0
-  console.log(props.product.index)
 })
 
 let lastClick = 0

@@ -1,9 +1,6 @@
 package de.lbeck.tipdabottle.purchase.controller;
 
-import de.lbeck.tipdabottle.purchase.dto.PurchaseCreateDTO;
-import de.lbeck.tipdabottle.purchase.dto.PurchaseResponseDTO;
-import de.lbeck.tipdabottle.purchase.dto.PurchaseDTO;
-import de.lbeck.tipdabottle.purchase.dto.PurchaseReverseDTO;
+import de.lbeck.tipdabottle.purchase.dto.*;
 import de.lbeck.tipdabottle.purchase.service.PurchaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -12,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
@@ -25,7 +23,7 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public Page<PurchaseResponseDTO> getAllPurchases(
+    public Page<PurchaseResponseAsGroupDTO> getAllPurchases(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") @Max(100) int size
     ){

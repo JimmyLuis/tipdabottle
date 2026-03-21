@@ -8,8 +8,15 @@ const props = defineProps({
   products: {
     type: Array,
     required: true
+  },
+  disabledCustomer:{
+    type: Boolean,
+    default: false
   }
 })
+
+const emit = defineEmits(['updatePurchase'])
+
 const productDummy = ref([])
 onMounted(async () => {
   for (let i = 0; i < 20; i++) {
@@ -39,16 +46,17 @@ function validateBadgeVision(product){
   return product.index === 0;
 
 }
+
 let lastClick = 0
-
-function handleClick(index) {
+function handleClick(product, index) {
   const now = Date.now()
-
   if (now - lastClick < 100) return index // block doppelte taps
-
   lastClick = now
-  return index = index + 1
+
+  product.index = product.index + index;
+  emit('updatePurchase', product)
 }
+
 </script>
 <template>
   <v-container fluid height="490" class="overflow-y-auto pt-0 mx-0 px-0">
@@ -69,10 +77,11 @@ function handleClick(index) {
           <template v-slot:badge>
             <h3>{{product.index}}</h3>
           </template>
-          <v-sheet class="ma-0 pa-0 flex-grow-1" style="user-select: none" >
-            <ProductSlot @click.stop.prevent="product.index = handleClick(product.index)" v-if="props.products" :product
-            @decrement="product.index--"
-            @increment="product.index++"
+
+          <v-sheet class="ma-0 pa-0 flex-grow-1 " :class="{'v-card--disabled': disabledCustomer}" style="user-select: none" >
+            <ProductSlot @click.stop.prevent="handleClick(product, 1)" v-if="props.products" :product
+            @decrement="handleClick(product, -1)"
+            @increment="handleClick(product, 1)"
             />
           </v-sheet>
         </v-badge>

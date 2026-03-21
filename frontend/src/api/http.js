@@ -10,8 +10,9 @@ export async function apiFetch(url, options = {}) {
 
     const data = await response.json();
     if (!response.ok) {
-      errorStore.set(data.message || "Server error")
+      errorStore.set(data || "Server error")
       new Error(data.message)
+      return response
     }
 
     return data

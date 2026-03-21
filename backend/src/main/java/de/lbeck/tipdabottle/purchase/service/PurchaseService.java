@@ -22,10 +22,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseService {
@@ -50,16 +49,24 @@ public class PurchaseService {
         this.purchaseResponseMapper = purchaseResponseMapper;
     }
 
-    public Page<PurchaseResponseDTO> getAllPurchases(int page, int size){
+    public Page<PurchaseResponseAsGroupDTO> getAllPurchases(int page, int size){
         Pageable pageable = PageRequest.of(
                 page,
-                size,
-                Sort.by("creationTime").descending()
+                size
         );
-        List<PurchaseResponseDTO> purchaseDTOList = new ArrayList<>();
-        Page<Purchase> purchasePage =  purchaseRepository.findAll(pageable);
-        purchasePage.forEach(purchase -> purchaseDTOList.add(purchaseResponseMapper.toDTO(purchase)));
-        return new PageImpl<>(purchaseDTOList, pageable, purchasePage.getTotalElements());
+        Page<PurchaseGroup> groupPage = purchaseRepository.findGroupIds(pageable);
+        List<Purchase> entities = purchaseRepository.findAllByPurchaseGroupIn(groupPage.getContent());
+        List<PurchaseResponseDTO> dtos = new ArrayList<>();
+        entities.forEach(purchase -> {
+            dtos.add(purchaseResponseMapper.toDTO(purchase));
+        });
+        Map<Long, List<PurchaseResponseDTO>> mappedAndGroupedPurchases = dtos.stream().collect(Collectors.groupingBy(PurchaseResponseDTO::purchaseGroupId));
+        List<PurchaseResponseAsGroupDTO> responseDtos = new ArrayList<>();
+        mappedAndGroupedPurchases.forEach((key, value) -> {
+            responseDtos.add(new PurchaseResponseAsGroupDTO(key, value));
+        });
+
+        return new PageImpl<>(responseDtos, pageable, groupPage.getTotalElements());
     }
 
     public PurchaseDTO getPurchaseById(Long id){
@@ -89,6 +96,7 @@ public class PurchaseService {
     }
 
     public List<PurchaseResponseDTO> createPurchases(Long customerId , List<PurchaseCreateDTO> purchaseCreateDTOList){
+        if (purchaseCreateDTOList.isEmpty()) throw new PurchaseDeniedException("Cant submit purchase without any products!");
         CustomerDTO customerDTO = customerService.getCustomerById(customerId);
         validateCustomerPurchase(customerDTO, purchaseCreateDTOList);
         Customer customer = customerMapper.toEntity(customerDTO);
@@ -101,7 +109,7 @@ public class PurchaseService {
         purchaseCreateDTOList.forEach(purchase -> {
             Product curProduct = productMapper.toEntity(productService.getProductById(purchase.product_id()));
             productList.add(purchaseProduct(curProduct, purchase));
-            customerBalance.accumulateAndGet(curProduct.getPrice(), (balance, cost) -> balance - cost);
+            customerBalance.accumulateAndGet(curProduct.getPrice(), (balance, cost) -> balance - cost * purchase.quantity());
             purchases.add(submitPurchase(customer, curProduct, group, purchase));
         });
 

@@ -23,3 +23,37 @@ export const useErrorStore = defineStore("errorStore", {
     }
   }
 })
+
+export const useNotifyStore = defineStore("notifyStore", {
+  state: () => ({
+    message: [],
+    show: false
+  }),
+  actions: {
+    set (message) {
+      this.message = message
+      this.show = true
+    },
+    clear () {
+      this.message = {}
+      this.show = false
+    }
+  }
+})
+
+export const useNotifyValidationStore = defineStore("notifyValidationStore", {
+  state: () => ({
+    message: {},
+    show: false
+  }),
+  actions: {
+    set (message) {
+      this.message = message
+      this.show = true
+    },
+    clear () {
+      this.message = {}
+      this.show = false
+    }
+  }
+})

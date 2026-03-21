@@ -2,8 +2,9 @@
 import CustomerSlot from "@/components/customer/CustomerSlot.vue";
 import {onMounted, ref} from "vue";
 import {apiFetch} from "@/api/http.js";
-import {getAllCustomers} from "@/api/customerApi.js";
+import {getAllCustomers, getCustomerById} from "@/api/customerApi.js";
 import {getAllProducts} from "@/api/productApi.js";
+import {useNotifyValidationStore} from "@/stores/app.js";
 
 
 const customers = ref([]);
@@ -21,10 +22,26 @@ onMounted(async () => {
     customersDummy.value.push(customer);
   }
   customers.value = await getAllCustomers();
+  customers.value.sort((a, b) => {
+    if (b.community !== a.community) {
+      return b.community - a.community
+    }
+    return a.lastName.localeCompare(b.lastName)
+  })
   products.value = await getAllProducts();
 })
 
 
+const refreshCustomer = async (customer) => {
+  customers.value = customers.value.filter(item => item.id !== customer.id);
+  customers.value.push(await getCustomerById(customer.id))
+  customers.value.sort((a, b) => {
+    if (b.community !== a.community) {
+      return b.community - a.community
+    }
+    return a.lastName.localeCompare(b.lastName)
+  })
+}
 
 
 
@@ -40,7 +57,7 @@ onMounted(async () => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <CustomerSlot v-if="customers" :customer :products />
+          <CustomerSlot v-if="customers" :customer :products @refresh-customer="refreshCustomer"/>
         </v-sheet>
       </v-col>
     </v-row>
