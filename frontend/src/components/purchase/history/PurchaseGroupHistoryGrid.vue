@@ -9,12 +9,12 @@ import PurchaseGroupHistorySlot from "@/components/purchase/history/PurchaseGrou
 import {getAllPurchases} from "@/api/purchaseApi.js";
 
 
-const purchaseGroups = ref([]);
 const purchaseGroupsDummy = ref([]);
+const purchaseGroups = ref([]);
 const page = ref(0)
 const loading = ref(false)
 const finished = ref(false)
-
+const observerTarget = ref(null)
 
 
 onMounted(async () => {
@@ -24,42 +24,49 @@ onMounted(async () => {
     }
     purchaseGroupsDummy.value.push(purchaseGroup);
   }
-  loading.value = true
-  let pageResponse = await getAllPurchases(page.value, 15);
-  console.log(pageResponse)
-  purchaseGroups.value.push(...pageResponse.content)
-  page.value = pageResponse.page.number
-  if (page.value === pageResponse.page.number) {
-    finished.value = true
+  await loadMore()
+  const observer = new IntersectionObserver(async (entries) => {
+    if (entries[0].isIntersecting) {
+      await loadMore()
+    }
+  })
+  if (observerTarget.value) {
+    observer.observe(observerTarget.value)
   }
-  loading.value = false
-  console.log(purchaseGroups.value)
 })
 
 const loadMore = async () => {
   if (loading.value || finished.value) return
+
   loading.value = true
-  let pageResponse = await getAllProducts(page, 15);
-  purchaseGroups.value.push(pageResponse.content)
-  page.value = pageResponse.page.number
-  if (page.value === pageResponse.page.number) {
+  const pageResponse = await getAllPurchases(page.value, 15)
+
+  purchaseGroups.value.push(...pageResponse.content)
+
+  // 👉 nächste Seite
+  page.value++
+
+  // 👉 fertig wenn letzte Seite
+  if (pageResponse.page.number >= pageResponse.page.totalPages - 1) {
     finished.value = true
   }
+
   loading.value = false
 }
 
 </script>
 
 <template>
-  <v-container fluid class="px-5">
-    <v-row @scroll.passive="loadMore" class="scroll-container" no-gutters v-if="purchaseGroups.length > 0">
+  <v-container fluid class="px-5 fill-height flex-grow-1 d-inline">
+    <v-row @scroll="loadMore"  no-gutters v-if="purchaseGroups.length > 0">
       <v-col
+        class=" overflow-y-auto"
         v-for="purchaseGroup in purchaseGroups"
         :key="purchaseGroup.id"
         cols="12"
         sm="12"
       >
-        <v-sheet class="ma-2 pa-2">
+        <v-sheet class="ma-2 pa-2" >
           <PurchaseGroupHistorySlot :purchaseGroup />
         </v-sheet>
       </v-col>
@@ -76,6 +83,15 @@ const loadMore = async () => {
         </v-sheet>
       </v-col>
     </v-row>
+    <div class="d-flex justify-center flex-grow-1">
+      <div ref="observerTarget" style="height: 20px;"></div>
+
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        class="ma-4"
+      />
+    </div>
   </v-container>
 </template>
 

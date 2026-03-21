@@ -10,7 +10,7 @@ import router from "@/router/index.js";
 
     <template v-slot:append>
       <v-btn class="rounded-xl mr-3" variant="outlined" @click="router.push('/purchase-history')">
-        <span class="pr-2">Bestellhistorie</span>
+        <span class="pr-2 d-none d-sm-inline">Bestellhistorie</span>
         <v-icon size="25" icon="mdi-receipt-text-clock-outline"></v-icon>
       </v-btn>
       <v-btn icon="mdi-account-cog-outline"/>

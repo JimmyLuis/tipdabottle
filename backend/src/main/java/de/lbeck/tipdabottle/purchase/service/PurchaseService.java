@@ -16,6 +16,9 @@ import de.lbeck.tipdabottle.purchase.model.Purchase;
 import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseGroupRepository;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseRepository;
+import jakarta.persistence.OrderBy;
+import org.hibernate.query.Order;
+import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +57,15 @@ public class PurchaseService {
                 page,
                 size
         );
-        Page<PurchaseGroup> groupPage = purchaseRepository.findGroupIds(pageable);
+        Page<PurchaseGroup> groupPage = purchaseGroupRepository.findGroupIdsOrdered(pageable);
         List<Purchase> entities = purchaseRepository.findAllByPurchaseGroupIn(groupPage.getContent());
         List<PurchaseResponseDTO> dtos = new ArrayList<>();
-        entities.forEach(purchase -> {
-            dtos.add(purchaseResponseMapper.toDTO(purchase));
-        });
-        Map<Long, List<PurchaseResponseDTO>> mappedAndGroupedPurchases = dtos.stream().collect(Collectors.groupingBy(PurchaseResponseDTO::purchaseGroupId));
+        entities.forEach(purchase -> dtos.add(purchaseResponseMapper.toDTO(purchase)));
+        Map<Long, List<PurchaseResponseDTO>> mappedAndGroupedPurchases = dtos.stream().collect(Collectors.groupingBy(
+                PurchaseResponseDTO::purchaseGroupId,
+                () -> new TreeMap<>(Comparator.reverseOrder()),
+                Collectors.toList()
+        ));
         List<PurchaseResponseAsGroupDTO> responseDtos = new ArrayList<>();
         mappedAndGroupedPurchases.forEach((key, value) -> {
             responseDtos.add(new PurchaseResponseAsGroupDTO(key, value));
