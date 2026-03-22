@@ -54,6 +54,13 @@ const loadMore = async () => {
   loading.value = false
 }
 
+const refresh = () => {
+  finished.value = false
+  page.value = 0
+  purchaseGroups.value = []
+  loadMore()
+}
+
 </script>
 
 <template>
@@ -67,7 +74,7 @@ const loadMore = async () => {
         sm="12"
       >
         <v-sheet class="ma-2 pa-2" >
-          <PurchaseGroupHistorySlot :purchaseGroup />
+          <PurchaseGroupHistorySlot :purchaseGroup @refresh-purchases="refresh"/>
         </v-sheet>
       </v-col>
     </v-row>

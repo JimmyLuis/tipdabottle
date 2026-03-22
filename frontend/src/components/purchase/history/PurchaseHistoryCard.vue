@@ -43,7 +43,6 @@ const handlePurchaseSelect = (purchase) => {
   } else {
     selectedPurchases.value.set(purchase.id, purchase)
   }
-  console.log(selectedPurchases.value)
 }
 </script>
 

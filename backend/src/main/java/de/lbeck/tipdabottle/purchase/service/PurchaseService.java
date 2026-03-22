@@ -178,12 +178,14 @@ public class PurchaseService {
 
         List<PurchaseResponseDTO> purchases = new ArrayList<>();
 
+        PurchaseGroup reversedPurchaseGroup = purchaseGroupRepository.save(new PurchaseGroup());
+
         purchaseReverseDTOList.forEach(purchase -> {
             Purchase purchaseEntity = purchaseRepository.findById(purchase.id()).get();
             Product curProduct = productMapper.toEntity(productService.getProductById(purchase.product_id()));
             productList.add(reversePurchaseProduct(curProduct, purchaseEntity));
             customerBalance.accumulateAndGet(curProduct.getPrice(), Double::sum);
-            purchases.add(submitReversePurchase(customer, curProduct, purchaseEntity.getPurchaseGroup(), purchaseEntity));
+            purchases.add(submitReversePurchase(customer, curProduct, reversedPurchaseGroup, purchaseEntity));
         });
         productList.forEach(productService::updateProductAndContainer);
 
@@ -195,6 +197,7 @@ public class PurchaseService {
         return purchases;
     }
     private PurchaseResponseDTO submitReversePurchase(Customer customer, Product product, PurchaseGroup group, Purchase purchase){
+
         Purchase reversedPurchase = new Purchase(
                 null,
                 group,
