@@ -13,6 +13,7 @@ public record PurchaseResponseDTO(
         double worth,
         int quantity,
         Boolean reversed,
-        Long reversedReverence
+        Long reversedReference,
+        Long reversedGroupReference
 ) {
 }

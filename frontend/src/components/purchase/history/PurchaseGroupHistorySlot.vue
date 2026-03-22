@@ -14,7 +14,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['refreshPurchases'])
+const emit = defineEmits(['refreshPurchases', 'jumpToReferencePurchaseGroup'])
 
 const products = ref([])
 const valNotify = useNotifyValidationStore()
@@ -38,7 +38,6 @@ function toReadableDate(date){
 const isActive = ref(false);
 
 const submitPurchaseEdit = async (purchases) => {
-  console.log(purchases)
   if (!purchases.size > 0) {
     valNotify.set("Du musst mindestens eine Bestellung zurücksetzen!")
     return
@@ -48,9 +47,19 @@ const submitPurchaseEdit = async (purchases) => {
   notify.set("Deine Bestellung wurde angepasst!")
   emit('refreshPurchases')
 }
-//todo Zeile 75 weiter machen:
-//todo reversedReverence richtig schreiben in purchaseEntity und reversedGroupReference hinzufügen, dto anpassen!
-//todo wenn man purchase reversed dann wird die quantity nicht mit einbezogen 2x 1€ cola sind nur +1 euro für den customer
+
+function validateAllGroupPurchasesFullyReversed(){
+  let allReversed = false;
+  props.purchaseGroup.items.forEach(item => {
+    if (!!item.reversedGroupReference) {
+      return false
+    } else {
+      allReversed = true;
+    }
+  })
+  return allReversed
+}
+
 </script>
 
 <template>
@@ -77,7 +86,7 @@ const submitPurchaseEdit = async (purchases) => {
                   Bestellung #{{ purchaseGroup.id }}
                 </v-card-title>
                 <v-card-title v-else>
-                  Gelöschte Bestellung #{{ purchaseGroup.items[0].reversedReference }}
+                  Gelöschte Bestellung #{{ purchaseGroup.items[0].reversedGroupReference }}
                 </v-card-title>
               </div>
             </v-card-title>
@@ -96,10 +105,11 @@ const submitPurchaseEdit = async (purchases) => {
             class="justify-end d-flex"
             cols="12"
             sm="2">
-            <v-card-actions>
+            <v-card-actions
+              @click.stop="emit('jumpToReferencePurchaseGroup', purchaseGroup)">
               <v-divider vertical class="mr-3"></v-divider>
-              <v-sheet class="border-lg rounded-sm mr-3 elevation-3" color="green">
-                <v-icon v-if="!purchaseGroup.items[0].reversed" size="45" icon="mdi-arrow-u-left-top"></v-icon>
+              <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
+                <v-icon v-if="validateAllGroupPurchasesFullyReversed()" size="45" icon="mdi-arrow-u-left-top"></v-icon>
                 <v-icon v-else size="45" icon="mdi-link-variant"></v-icon>
               </v-sheet>
             </v-card-actions>

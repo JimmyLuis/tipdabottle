@@ -22,7 +22,6 @@ export async function getAllPurchases(page, size){
 export async function revertPurchase(purchases){
   const mappedPurchases = []
   purchases.forEach((purchase, id) => {
-    console.log(id)
     mappedPurchases.push({
       id: purchase.id,
       product_id: purchase.product.id,
@@ -37,7 +36,5 @@ export async function revertPurchase(purchases){
     },
     body: JSON.stringify(mappedPurchases)
   }
-  console.log(customerId)
-  console.log(mappedPurchases)
   return await apiFetch(`/purchases/customer/${customerId}`, options)
 }

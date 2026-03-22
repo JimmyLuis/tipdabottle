@@ -2,7 +2,8 @@
 
 
 import PurchaseHistoryGrid from "@/components/purchase/history/PurchaseHistoryGrid.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {getCustomerById} from "@/api/customerApi.js";
 
 const props = defineProps({
   purchaseGroup: {
@@ -19,7 +20,8 @@ const props = defineProps({
         worth: 0.00,
         reversed: false,
         quantity: 0,
-        reversedReference: 0
+        reversedReference: 0,
+        reversedGroupReference: 0
       }]
     }
   }
@@ -28,11 +30,28 @@ const props = defineProps({
 const emit = defineEmits(['cancelPurchaseEdit', 'submitPurchaseEdit'])
 
 const selectedPurchases = ref(new Map)
+const customer = ref({})
+const reversedPurchase = ref()
+
+onMounted(async () => {
+  customer.value = await getCustomerById(props.purchaseGroup.items[0].customerId)
+  let containsReversedP;
+  props.purchaseGroup.items.forEach(item => {
+    if (item.reversedGroupReference) containsReversedP = item.reversedGroupReference
+  })
+  reversedPurchase.value = containsReversedP;
+})
+
 
 function calculatePurchaseGroupWorth() {
   let worth = 0.0
   props.purchaseGroup.items.forEach(purchase => {
     worth = worth + purchase.worth
+  })
+  props.purchaseGroup.items.forEach(purchase => {
+    if (!!purchase.reversedReference){
+      worth = worth - purchase.worth
+    }
   })
   return worth
 }
@@ -54,12 +73,12 @@ const handlePurchaseSelect = (purchase) => {
           <v-col
             class="d-flex justify-space-between"
             cols="12"
-            sm="8">
+            sm="4">
             <div class="pr-3">
-              <div class="d-flex">
+              <div class="d-flex align-end">
                 Bestellung #{{purchaseGroup.id}}
+                <h6 class="pb-1 pl-3 opacity-70" v-if="!!reversedPurchase">Bestellreferenz #{{reversedPurchase}}</h6>
                 <v-spacer></v-spacer>
-                <div class="pl-5 d-none d-sm-flex text-body-2 opacity-70  align-center">{{purchaseGroup.items[0].creationTime}}</div>
               </div>
               <v-card-subtitle>
                 <div class="d-flex justify-start align-center pb-1">
@@ -73,10 +92,19 @@ const handlePurchaseSelect = (purchase) => {
             </div>
           </v-col>
           <v-col
+            class=""
+          cols="12"
+          sm="4">
+            <div class="text-h6">Benutzer</div>
+            <v-card-subtitle>
+              <h3>{{customer.lastName}}<span v-if="!!customer.firstName">, {{customer.firstName}}</span></h3>
+            </v-card-subtitle>
+          </v-col>
+          <v-col
             class="d-flex justify-md-end justify-sm-center"
             cols="12"
             sm="4">
-            <div class="pr-2 d-flex align-center pb-8">
+            <div class="pr-2 d-flex align-center">
               <v-btn class="mr-3" color="red" icon="mdi-close" @click="emit('cancelPurchaseEdit')"></v-btn>
               <v-divider vertical thickness="1" opacity="0.15"></v-divider>
               <v-btn class="ml-3" color="green" icon="mdi-arrow-right" @click="emit('submitPurchaseEdit', selectedPurchases)"></v-btn>
@@ -85,8 +113,9 @@ const handlePurchaseSelect = (purchase) => {
         </v-row>
       </v-card-title>
     </div>
-    <v-card-text>
-      <v-banner class="pt-0"></v-banner>
+    <v-card-text class="py-0">
+      <div class="d-none d-sm-flex text-body-2 opacity-70 pb-1 align-center">{{purchaseGroup.items[0].creationTime}}</div>
+      <v-banner class="py-0"></v-banner>
     </v-card-text>
     <v-card-item class="pt-0 px-0" >
       <PurchaseHistoryGrid :purchases="purchaseGroup.items" @purchase-select="handlePurchaseSelect"/>

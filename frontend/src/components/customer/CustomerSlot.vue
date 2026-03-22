@@ -75,7 +75,7 @@ watch(isActive, () => {
             class="d-flex"
             cols="12"
             sm="9">
-            <span class="ml-3">{{ props.customer.lastName }}, {{ props.customer.firstName }}</span>
+            <v-card-title><span class="ml-3">{{ props.customer.lastName }}, {{ props.customer.firstName }}</span></v-card-title>
             <v-spacer/>
             <v-icon v-if="customer.locked" color="red" class="pr-5" icon="mdi-lock"></v-icon>
           </v-col>

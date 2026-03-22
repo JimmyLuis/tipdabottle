@@ -24,7 +24,8 @@ const props = defineProps({
       worth: 1,
       quantity: 1,
       reversed: false,
-      reversedReference: null
+      reversedReference: null,
+      reversedGroupReference: null
     }
   }
 })
@@ -41,11 +42,21 @@ function handleClick() {
 
 }
 
+function calculateVCardColor(){
+  if (props.purchase.reversed || !!props.purchase.reversedReference || !!props.purchase.reversedGroupReference){
+    return 'red-lighten-4'
+  }
+  return isSelected.value ? 'red-accent-1' : 'grey-lighten-2'
+}
+
+function calculateVCardDisabled(){
+  return props.purchase.reversed || !!props.purchase.reversedReference || !!props.purchase.reversedGroupReference
+}
 
 </script>
 
 <template>
-  <v-card class="pl-3" :elevation="isSelected ? 1 : 3" :color="isSelected ? 'red-accent-1' : 'grey-lighten-2' ">
+  <v-card class="pl-3" :disabled="calculateVCardDisabled()" :elevation="isSelected ? 1 : 3" :color="calculateVCardColor()" >
     <v-row>
       <v-col
       cols="12"
@@ -75,16 +86,24 @@ function handleClick() {
         class="d-flex align-end justify-end"
         cols="12"
         sm="2">
-        <v-fade-transition hide-on-leave>
-          <v-sheet v-if="!isSelected" @click="handleClick()" class="border-lg rounded-sm elevation-3 mr-5" color="green">
-            <v-icon size="35" icon="mdi-arrow-u-left-top"></v-icon>
+        <div v-if="!calculateVCardDisabled()">
+          <v-fade-transition hide-on-leave>
+            <v-sheet v-if="!isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="green">
+              <v-icon size="35" icon="mdi-arrow-u-left-top"></v-icon>
+            </v-sheet>
+          </v-fade-transition>
+          <v-fade-transition hide-on-leave>
+            <v-sheet v-if="isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="red">
+              <v-icon size="35" icon="mdi-close-circle-outline"></v-icon>
+            </v-sheet>
+          </v-fade-transition>
+        </div>
+        <div v-else>
+          <v-sheet class="border-lg rounded elevation-3 mr-5 mt-1 d-flex align-center" color="green">
+            <h4 class="mx-2 d-md-flex d-none ">Erstattet</h4>
+            <v-icon size="35" icon="mdi-autorenew"></v-icon>
           </v-sheet>
-        </v-fade-transition>
-        <v-fade-transition hide-on-leave>
-          <v-sheet v-if="isSelected" @click="handleClick()" class="border-lg rounded-sm elevation-3 mr-5" color="red">
-            <v-icon size="35" icon="mdi-close-circle-outline"></v-icon>
-          </v-sheet>
-        </v-fade-transition>
+        </div>
       </v-col>
     </v-row>
     <v-card-text class="px-0">

@@ -4,17 +4,21 @@ import {onMounted, ref} from "vue";
 import {apiFetch} from "@/api/http.js";
 import {getAllCustomers, getCustomerById} from "@/api/customerApi.js";
 import {getAllProducts} from "@/api/productApi.js";
-import {useNotifyValidationStore} from "@/stores/app.js";
+import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
 import PurchaseGroupHistorySlot from "@/components/purchase/history/PurchaseGroupHistorySlot.vue";
 import {getAllPurchases} from "@/api/purchaseApi.js";
 
 
 const purchaseGroupsDummy = ref([]);
 const purchaseGroups = ref([]);
+const purchaseGroupJumpRefs = ref([])
+const activeJumpElement = ref(null)
 const page = ref(0)
 const loading = ref(false)
 const finished = ref(false)
 const observerTarget = ref(null)
+const notifyVal = useNotifyValidationStore()
+const notify = useNotifyStore()
 
 
 onMounted(async () => {
@@ -43,10 +47,8 @@ const loadMore = async () => {
 
   purchaseGroups.value.push(...pageResponse.content)
 
-  // 👉 nächste Seite
   page.value++
 
-  // 👉 fertig wenn letzte Seite
   if (pageResponse.page.number >= pageResponse.page.totalPages - 1) {
     finished.value = true
   }
@@ -61,6 +63,31 @@ const refresh = () => {
   loadMore()
 }
 
+const scrollToPurchaseGroup = async (purchaseGroup) => {
+  notify.set('Suche...')
+  for (let i = 0; i < 50; i++) {
+    if (!!purchaseGroupJumpRefs.value[purchaseGroup.id]) {
+      await loadMore()
+    } else {
+      break
+    }
+    if (i === 50) {
+      notifyVal.set('Die verbundene Bestellung konnte nicht gefunden werden. Sie liegt zu lange zurück!')
+      return
+    }
+  }
+  purchaseGroupJumpRefs.value[purchaseGroup.items[0].reversedGroupReference].$el.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  })
+  activeJumpElement.value = purchaseGroup.items[0].reversedGroupReference
+
+  // nach kurzer Zeit wieder entfernen (optional)
+  setTimeout(() => {
+    activeJumpElement.value = null
+  }, 2000)
+}
+
 </script>
 
 <template>
@@ -73,8 +100,8 @@ const refresh = () => {
         cols="12"
         sm="12"
       >
-        <v-sheet class="ma-2 pa-2" >
-          <PurchaseGroupHistorySlot :purchaseGroup @refresh-purchases="refresh"/>
+        <v-sheet class="ma-2 pa-2 group-item" :class="{ active: activeJumpElement === purchaseGroup.id }" :ref="el => purchaseGroupJumpRefs[purchaseGroup.id] = el">
+          <PurchaseGroupHistorySlot :purchaseGroup @refresh-purchases="refresh" @jump-to-reference-purchase-group="scrollToPurchaseGroup"/>
         </v-sheet>
       </v-col>
     </v-row>
@@ -103,5 +130,26 @@ const refresh = () => {
 </template>
 
 <style scoped>
+.group-item {
+  transition: all 0.3s ease;
+}
 
+@keyframes pop {
+  0% {
+    transform: scale(1);
+    background-color: transparent;
+  }
+  50% {
+    transform: scale(1.05);
+    background-color: rgba(76, 175, 80, 0.15); /* 🔥 leicht grün */
+  }
+  100% {
+    transform: scale(1);
+    background-color: transparent;
+  }
+}
+
+.group-item.active {
+  animation: pop 2s ease;
+}
 </style>

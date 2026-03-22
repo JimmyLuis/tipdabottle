@@ -36,6 +36,7 @@ public class Purchase {
     @Column
     private Boolean reversed;
     @Column(nullable = true)
-    private Long reversedReverence;
-
+    private Long reversedReference;
+    @Column(nullable = true)
+    private Long reversedGroupReference;
 }

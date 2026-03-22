@@ -141,6 +141,7 @@ public class PurchaseService {
                 product.getPrice() * purchaseCreateDTO.quantity(),
                 purchaseCreateDTO.quantity(),
                 false,
+                null,
                 null
         );
 
@@ -184,7 +185,7 @@ public class PurchaseService {
             Purchase purchaseEntity = purchaseRepository.findById(purchase.id()).get();
             Product curProduct = productMapper.toEntity(productService.getProductById(purchase.product_id()));
             productList.add(reversePurchaseProduct(curProduct, purchaseEntity));
-            customerBalance.accumulateAndGet(curProduct.getPrice(), Double::sum);
+            customerBalance.accumulateAndGet(curProduct.getPrice() * purchaseEntity.getQuantity(), Double::sum);
             purchases.add(submitReversePurchase(customer, curProduct, reversedPurchaseGroup, purchaseEntity));
         });
         productList.forEach(productService::updateProductAndContainer);
@@ -196,21 +197,23 @@ public class PurchaseService {
 
         return purchases;
     }
-    private PurchaseResponseDTO submitReversePurchase(Customer customer, Product product, PurchaseGroup group, Purchase purchase){
+    private PurchaseResponseDTO submitReversePurchase(Customer customer, Product product, PurchaseGroup reversedGroup, Purchase purchase){
 
         Purchase reversedPurchase = new Purchase(
                 null,
-                group,
+                reversedGroup,
                 product,
                 customer,
                 Timestamp.from(Instant.now()),
                 product.getPrice() * purchase.getQuantity(),
                 purchase.getQuantity(),
                 true,
-                purchase.getId()
+                purchase.getId(),
+                purchase.getPurchaseGroup().getId()
         );
         reversedPurchase = purchaseRepository.save(reversedPurchase);
-        purchase.setReversedReverence(reversedPurchase.getId());
+        purchase.setReversedReference(reversedPurchase.getId());
+        purchase.setReversedGroupReference(reversedPurchase.getPurchaseGroup().getId());
         purchaseRepository.save(purchase);
         return purchaseResponseMapper.toDTO(reversedPurchase);
     }
@@ -236,7 +239,7 @@ public class PurchaseService {
                 throw new PurchaseDeniedException("Purchase with product name " + curPurchase.getProduct().getName() + " happened too long ago : " + curPurchase.getCreationTime());
             }
             if (curPurchase.getPurchaseGroup() == null) throw new PurchaseNotFoundException("Purchase group of purchase" + purchase.id() + " not found");
-            if (curPurchase.getReversed() || curPurchase.getReversedReverence() != null) { //todo properties value
+            if (curPurchase.getReversed() || curPurchase.getReversedReference() != null || curPurchase.getReversedGroupReference() != null) { //todo properties value
                 throw new PurchaseDeniedException("Purchase with product name " + curPurchase.getProduct().getName() + " is already reversed");
             }
             if (!Objects.equals(curPurchase.getCustomer().getId(), customer.id())){
