@@ -48,8 +48,9 @@ const submitPurchaseEdit = async (purchases) => {
   notify.set("Deine Bestellung wurde angepasst!")
   emit('refreshPurchases')
 }
-//todo Zeile 74 weiter machen:
+//todo Zeile 75 weiter machen:
 //todo reversedReverence richtig schreiben in purchaseEntity und reversedGroupReference hinzufügen, dto anpassen!
+//todo wenn man purchase reversed dann wird die quantity nicht mit einbezogen 2x 1€ cola sind nur +1 euro für den customer
 </script>
 
 <template>
@@ -62,8 +63,14 @@ const submitPurchaseEdit = async (purchases) => {
           sm="10">
             <v-card-title class="d-flex align-center pb-0">
               <v-avatar
+                v-if="!purchaseGroup.items[0].reversed"
                 class="elevation-1"
                 icon="mdi-package-variant"
+              />
+              <v-avatar
+                v-else
+                class="elevation-1"
+                icon="mdi-package-variant-remove"
               />
               <div class="d-inline">
                 <v-card-title v-if="!purchaseGroup.items[0].reversed">
