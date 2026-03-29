@@ -53,6 +53,8 @@ function calculatePurchaseGroupWorth() {
       worth = worth - purchase.worth
     }
   })
+  //hinzugefügt weil -0.00 anzeige war
+  if (worth < 0.0099) worth *= -1
   return worth
 }
 

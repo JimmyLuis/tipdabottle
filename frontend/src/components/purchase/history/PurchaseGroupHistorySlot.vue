@@ -36,12 +36,25 @@ function toReadableDate(date){
 }
 
 const isActive = ref(false);
+const isActiveInner = ref(false);
 
 const submitPurchaseEdit = async (purchases) => {
   if (!purchases.size > 0) {
     valNotify.set("Du musst mindestens eine Bestellung zurücksetzen!")
     return
   }
+
+  let now = Date.now();
+  let tooLongAgo = false;
+  purchases.forEach((purchase ,id) => {
+    let timestamp = new Date(purchase.creationTime).getTime();
+    let isOlderThan15Min = timestamp < (now - 15 * 60 * 1000);
+    if (isOlderThan15Min) {
+      valNotify.set('Die Bestellung liegt zu lange zurück und kann nicht zurückgesetzt werden!')
+      tooLongAgo = true;
+    }
+  })
+  if (tooLongAgo) return
   isActive.value = !isActive.value
   const res = await revertPurchase(purchases)
   notify.set("Deine Bestellung wurde angepasst!")
@@ -58,6 +71,15 @@ function validateAllGroupPurchasesFullyReversed(){
     }
   })
   return allReversed
+}
+async function submitRemainingPurchases() {
+  isActiveInner.value = !isActiveInner.value
+  let purchases = props.purchaseGroup.items.filter(purchase => !purchase.reversedGroupReference)
+  let mappedPurchase = new Map
+  purchases.forEach(purchase => {
+    mappedPurchase.set(purchase.id, purchase)
+  })
+  await submitPurchaseEdit(mappedPurchase)
 }
 
 </script>
@@ -105,14 +127,45 @@ function validateAllGroupPurchasesFullyReversed(){
             class="justify-end d-flex"
             cols="12"
             sm="2">
-            <v-card-actions
-              @click.stop="emit('jumpToReferencePurchaseGroup', purchaseGroup)">
-              <v-divider vertical class="mr-3"></v-divider>
-              <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
-                <v-icon v-if="validateAllGroupPurchasesFullyReversed()" size="45" icon="mdi-arrow-u-left-top"></v-icon>
-                <v-icon v-else size="45" icon="mdi-link-variant"></v-icon>
-              </v-sheet>
-            </v-card-actions>
+            <v-dialog v-model="isActiveInner" attach="body" @click.stop>
+              <template v-slot:activator="{props: activatorProps}" >
+                <v-card-actions
+                  v-if="validateAllGroupPurchasesFullyReversed()"
+                  v-bind="activatorProps">
+                  <v-divider vertical class="mr-3"></v-divider>
+                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
+                    <v-icon size="45" icon="mdi-arrow-u-left-top"></v-icon>
+                  </v-sheet>
+                </v-card-actions>
+                <v-card-actions
+                  v-else
+                  @click.stop="emit('jumpToReferencePurchaseGroup', purchaseGroup)">
+                  <v-divider vertical class="mr-3"></v-divider>
+                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
+                    <v-icon size="45" icon="mdi-link-variant"></v-icon>
+                  </v-sheet>
+                </v-card-actions>
+              </template>
+              <template v-slot:default>
+                <v-container
+                  class="d-flex justify-center align-center">
+                  <v-card
+                    width="400"
+                    title="Gesamte Bestellung löschen?"
+                    subtitle="Dieser Vorgang kann nicht rückgängig gemacht werden.">
+                    <v-card-actions class="justify-space-evenly">
+
+                      <div class="pr-2 d-flex align-center justify-space-evenly flex-grow-1">
+                        <v-btn border class="mr-3" color="red" icon="mdi-close" @click="isActiveInner = !isActiveInner"></v-btn>
+                        <v-divider vertical thickness="1" opacity="0.15"></v-divider>
+                        <v-btn border class="ml-3" color="green" icon="mdi-arrow-right" @click="submitRemainingPurchases()"></v-btn>
+                      </div>
+                    </v-card-actions>
+                  </v-card>
+
+                </v-container>
+              </template>
+            </v-dialog>
           </v-col>
         </v-row>
       </v-card>
