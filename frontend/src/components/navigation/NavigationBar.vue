@@ -1,6 +1,7 @@
 <script setup>
 
 import router from "@/router/index.js";
+import AdminPanelDialog from "@/components/admin/AdminPanelDialog.vue";
 </script>
 
 <template>
@@ -18,7 +19,7 @@ import router from "@/router/index.js";
         <span class="pr-2 d-none d-sm-inline">Bestellhistorie</span>
         <v-icon size="25" icon="mdi-receipt-text-clock-outline"></v-icon>
       </v-btn>
-      <v-btn icon="mdi-account-cog-outline"/>
+      <AdminPanelDialog/>
     </template>
   </v-app-bar>
 </template>

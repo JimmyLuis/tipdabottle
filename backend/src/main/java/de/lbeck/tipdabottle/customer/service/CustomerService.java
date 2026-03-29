@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CustomerService {
@@ -64,7 +65,7 @@ public class CustomerService {
         Customer finalCustomer = customer;
         customerRepository.findByEmail(customerUpdateDTO.email())
                 .ifPresent(mailCustomer -> {
-                    if (mailCustomer.getEmail().equals(finalCustomer.getEmail())) {
+                    if (mailCustomer.getEmail().equals(customerUpdateDTO.email()) && !Objects.equals(mailCustomer.getId(), id)) {
                         throw new EmailAlreadyExistsException("Customer with email " + mailCustomer.getEmail() + " already exists!");
                     }
                 });

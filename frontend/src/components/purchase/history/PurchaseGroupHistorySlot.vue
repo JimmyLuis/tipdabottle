@@ -150,7 +150,7 @@ async function submitRemainingPurchases() {
                 <v-container
                   class="d-flex justify-center align-center">
                   <v-card
-                    width="400"
+                    width="400"**
                     title="Gesamte Bestellung löschen?"
                     subtitle="Dieser Vorgang kann nicht rückgängig gemacht werden.">
                     <v-card-actions class="justify-space-evenly">
