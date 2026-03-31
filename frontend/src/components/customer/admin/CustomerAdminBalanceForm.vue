@@ -37,7 +37,7 @@ const submit = async () => {
 }
 </script>
 <template>
-  <v-card class="pa-4" max-width="400">
+  <v-card class="pa-4">
     <v-card-title>Saldo anpassen</v-card-title>
 
     <v-form ref="form" v-model="isValid">
@@ -56,7 +56,7 @@ const submit = async () => {
       />
 
       <v-btn
-        color="red"
+        color="primary"
         class="mt-4"
         :disabled="!isValid"
         @click="submit"

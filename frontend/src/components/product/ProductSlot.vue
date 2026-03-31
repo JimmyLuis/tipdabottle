@@ -80,7 +80,7 @@ function handleClick(emitValue) {
     <v-row class="d-flex justify-center">
       <v-col >
         <v-slide-x-transition hide-on-leave>
-          <v-sheet v-if="!bool" color="green" class="d-flex flex-grow-1 justify-center py-2">
+          <v-sheet v-if="!bool" color="secondary" class="d-flex flex-grow-1 justify-center py-2">
             <v-icon icon="mdi-plus" color="white"></v-icon>
           </v-sheet>
 
@@ -88,12 +88,12 @@ function handleClick(emitValue) {
         <v-slide-x-transition hide-on-leave>
           <v-row v-if="bool" no-gutters>
             <v-col cols="12" sm="8" >
-              <v-sheet color="green" class="d-flex flex-grow-1 justify-center py-2"  @click.stop.prevent="handleClick('increment')" v-ripple="true">
+              <v-sheet color="secondary" class="d-flex flex-grow-1 justify-center py-2"  @click.stop.prevent="handleClick('increment')" v-ripple="true">
                 <v-icon icon="mdi-plus" color="white"></v-icon>
               </v-sheet>
             </v-col>
             <v-col cols="12" sm="4" >
-              <v-sheet color="red" class="d-flex flex-grow-1 justify-center py-2" @click.stop.prevent="handleClick('decrement')" v-ripple="true">
+              <v-sheet color="primary" class="d-flex flex-grow-1 justify-center py-2" @click.stop.prevent="handleClick('decrement')" v-ripple="true">
                 <v-icon icon="mdi-minus" color="white"></v-icon>
               </v-sheet>
             </v-col>

@@ -44,9 +44,9 @@ function handleClick() {
 
 function calculateVCardColor(){
   if (props.purchase.reversed || !!props.purchase.reversedReference || !!props.purchase.reversedGroupReference){
-    return 'red-lighten-4'
+    return 'primary-lighten-4'
   }
-  return isSelected.value ? 'red-accent-1' : 'grey-lighten-2'
+  return isSelected.value ? 'primary-accent-1' : 'grey-lighten-2'
 }
 
 function calculateVCardDisabled(){
@@ -88,18 +88,18 @@ function calculateVCardDisabled(){
         sm="2">
         <div v-if="!calculateVCardDisabled()">
           <v-fade-transition hide-on-leave>
-            <v-sheet v-if="!isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="green">
+            <v-sheet v-if="!isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="secondary">
               <v-icon size="35" icon="mdi-arrow-u-left-top"></v-icon>
             </v-sheet>
           </v-fade-transition>
           <v-fade-transition hide-on-leave>
-            <v-sheet v-if="isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="red">
+            <v-sheet v-if="isSelected" @click="handleClick()" class="border-lg rounded elevation-3 mr-5" color="primary">
               <v-icon size="35" icon="mdi-close-circle-outline"></v-icon>
             </v-sheet>
           </v-fade-transition>
         </div>
         <div v-else>
-          <v-sheet class="border-lg rounded elevation-3 mr-5 mt-1 d-flex align-center" color="green">
+          <v-sheet class="border-lg rounded elevation-3 mr-5 mt-1 d-flex align-center" color="secondary">
             <h4 class="mx-2 d-md-flex d-none ">Erstattet</h4>
             <v-icon size="35" icon="mdi-autorenew"></v-icon>
           </v-sheet>

@@ -36,9 +36,9 @@ const save = async () => {
 </script>
 
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" sm="8">
+  <v-container fluid>
+    <v-row >
+      <v-col cols="12" sm="8" class="d-flex flex-column justify-center">
         <v-card class="pa-4" >
           <v-card-title>User bearbeiten</v-card-title>
 
@@ -76,7 +76,7 @@ const save = async () => {
                 />
 
                 <v-btn
-                  color="red"
+                  color="primary"
                   class="mt-4"
                   :disabled="!isValid"
                   @click="save"
@@ -88,7 +88,7 @@ const save = async () => {
           </v-form>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4">
+      <v-col cols="12" sm="4" class="d-flex flex-column justify-center">
         <CustomerAdminBalanceForm :customer/>
       </v-col>
     </v-row>

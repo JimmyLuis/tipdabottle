@@ -1,28 +1,28 @@
 <script setup>
-import PurchaseCard from "@/components/purchase/PurchaseCard.vue";
 import {purchaseProducts} from "@/api/purchaseApi.js";
-import {ref, watch} from "vue";
-import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
+import {ref} from "vue";
+import {useNotifyStore} from "@/stores/app.js";
+import ProductAdminCard from "@/components/product/admin/ProductAdminCard.vue";
 
 const props = defineProps({
-  customer: {
+  product: {
     type: Object,
     required: true,
     default: {
-      firstName: "NOT AVAILABLE",
-      lastName: "NOT AVAILABLE",
-      balance: 0.00
+      id: 0,
+      name: "NOT AVAILABLE",
+      description: "NOT AVAILABLE",
+      price: 0.00,
+      category:"NOT AVAILABLE",
+      stock: 1,
+      container: {}
     }
-  },
-  products: {
-    type: Array,
-    required: true
   }
 })
 
 const notify = useNotifyStore()
 
-const emit = defineEmits(['refreshCustomer'])
+const emit = defineEmits(['refreshProduct'])
 
 const isActive = ref(false);
 
@@ -38,15 +38,6 @@ const submitPurchase = async function(submitProducts) {
 
 }
 
-const handleCustomerLocked = customer => {
-  if (customer.locked) {
-    useNotifyValidationStore().set("Hast du mal darüber nachgedacht einzuzahlen?!")
-  }
-}
-
-watch(isActive, () => {
-  if (isActive) handleCustomerLocked(props.customer)
-})
 </script>
 
 <template>
@@ -55,29 +46,24 @@ watch(isActive, () => {
       <v-card elevation="2" v-bind="activatorProps" variant="tonal" height="75" class="align-content-center v-card--hover" style="user-select: none">
         <v-row no-gutters class="d-flex align-center justify-center">
           <v-col
-            class="d-flex justify-center"
+            class="d-flex  justify-center"
           cols="12"
           sm="3">
             <v-avatar
-              v-if="!customer.community"
               class="elevation-1"
-            icon="mdi-account"
-            >
-            </v-avatar>
-            <v-avatar
-              v-else
-              class="elevation-1"
-              icon="mdi-account-multiple"
-            >
-            </v-avatar>
+            icon="mdi-cup"
+            />
           </v-col>
           <v-col
             class="d-flex align-center"
             cols="12"
             sm="9">
-            <v-card-title><span class="ml-3">{{ props.customer.lastName }}, {{ props.customer.firstName }}</span></v-card-title>
+            <v-card-title>
+              {{props.product.name}}
+              <v-card-subtitle class="ma-0 pa-0"> {{props.product.description}}</v-card-subtitle>
+            </v-card-title>
             <v-spacer/>
-            <v-icon v-if="customer.locked" color="primary" class="pr-5" icon="mdi-lock"></v-icon>
+            <v-icon v-if="product.stock < 15" size="30" color="primary-lighten-1" class="pr-5" icon="mdi-alert"></v-icon>
           </v-col>
         </v-row>
       </v-card>
@@ -85,7 +71,7 @@ watch(isActive, () => {
     <template v-slot:default>
       <v-card height="700" >
         <v-card-item >
-          <PurchaseCard :customer :products @cancelPurchase="isActive = false" @submitPurchase="submitPurchase"></PurchaseCard>
+          <ProductAdminCard :product @cancel-edit="isActive= !isActive"/>
         </v-card-item>
       </v-card>
     </template>

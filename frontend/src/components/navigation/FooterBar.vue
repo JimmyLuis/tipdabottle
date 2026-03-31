@@ -10,7 +10,7 @@ const links = [
 </script>
 
 <template>
-  <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3 rounded-t-lg" color="red-darken-2">
+  <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3 rounded-t-lg" color="primary-darken-2">
 
     <div class="flex-1-0-100 text-center mt-2">
       {{ new Date().getFullYear() }} — <strong>tipdabottle</strong> — v.0.1

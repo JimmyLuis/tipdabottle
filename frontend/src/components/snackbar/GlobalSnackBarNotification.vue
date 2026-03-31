@@ -10,11 +10,11 @@ const message = storeToRefs(notifyStore)
 
 <template>
   <v-snackbar
-    color="green"
+    color="info"
     timeout="3000"
     v-model="notifyStore.show"
     timer="top"
-    location="top right"
+    location="top left"
     z-index="2500"
   >
     <h3>Info</h3>

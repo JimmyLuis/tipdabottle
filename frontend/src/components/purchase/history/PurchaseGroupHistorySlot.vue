@@ -87,7 +87,7 @@ async function submitRemainingPurchases() {
 <template>
   <v-dialog v-model="isActive">
     <template v-slot:activator="{props: activatorProps}">
-      <v-card :color="!purchaseGroup.items[0].reversed ? 'default' : 'red'" elevation="2" v-bind="activatorProps" variant="tonal" class="align-content-center v-card--hover" style="user-select: none">
+      <v-card :color="!purchaseGroup.items[0].reversed ? 'default' : 'primary'" elevation="2" v-bind="activatorProps" variant="tonal" class="align-content-center v-card--hover" style="user-select: none">
         <v-row>
           <v-col
           cols="12"
@@ -133,7 +133,7 @@ async function submitRemainingPurchases() {
                   v-if="validateAllGroupPurchasesFullyReversed()"
                   v-bind="activatorProps">
                   <v-divider vertical class="mr-3"></v-divider>
-                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
+                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="secondary">
                     <v-icon size="45" icon="mdi-arrow-u-left-top"></v-icon>
                   </v-sheet>
                 </v-card-actions>
@@ -141,7 +141,7 @@ async function submitRemainingPurchases() {
                   v-else
                   @click.stop="emit('jumpToReferencePurchaseGroup', purchaseGroup)">
                   <v-divider vertical class="mr-3"></v-divider>
-                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="green">
+                  <v-sheet class="border-lg rounded mr-3 elevation-3" color="secondary">
                     <v-icon size="45" icon="mdi-link-variant"></v-icon>
                   </v-sheet>
                 </v-card-actions>
@@ -156,9 +156,9 @@ async function submitRemainingPurchases() {
                     <v-card-actions class="justify-space-evenly">
 
                       <div class="pr-2 d-flex align-center justify-space-evenly flex-grow-1">
-                        <v-btn border class="mr-3" color="red" icon="mdi-close" @click="isActiveInner = !isActiveInner"></v-btn>
+                        <v-btn border class="mr-3" color="primary" icon="mdi-close" @click="isActiveInner = !isActiveInner"></v-btn>
                         <v-divider vertical thickness="1" opacity="0.15"></v-divider>
-                        <v-btn border class="ml-3" color="green" icon="mdi-arrow-right" @click="submitRemainingPurchases()"></v-btn>
+                        <v-btn border class="ml-3" color="secondary" icon="mdi-arrow-right" @click="submitRemainingPurchases()"></v-btn>
                       </div>
                     </v-card-actions>
                   </v-card>

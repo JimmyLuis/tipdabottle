@@ -5,7 +5,7 @@ import AdminPanelDialog from "@/components/admin/AdminPanelDialog.vue";
 </script>
 
 <template>
-  <v-app-bar class="rounded-b-lg" :elevation="10" color="red-darken-2" height="75">
+  <v-app-bar class="rounded-b-lg" :elevation="10" color="primary-darken-2" height="75">
 
     <v-app-bar-title class="font-weight-bold pl-5">
       <div @click="router.push('/')">

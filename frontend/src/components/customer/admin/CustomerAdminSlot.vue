@@ -21,33 +21,8 @@ const props = defineProps({
   }
 })
 
-const notify = useNotifyStore()
-
-const emit = defineEmits(['refreshCustomer'])
-
 const isActive = ref(false);
 
-
-const submitPurchase = async function(submitProducts) {
-  await purchaseProducts(props.customer.id, submitProducts.values().toArray())
-    .then(res => {
-      if (res)
-        notify.set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
-    })
-  isActive.value = false
-  emit('refreshCustomer', props.customer)
-
-}
-
-const handleCustomerLocked = customer => {
-  if (customer.locked) {
-    useNotifyValidationStore().set("Hast du mal darüber nachgedacht einzuzahlen?!")
-  }
-}
-
-watch(isActive, () => {
-  if (isActive) handleCustomerLocked(props.customer)
-})
 </script>
 
 <template>
@@ -73,22 +48,18 @@ watch(isActive, () => {
             </v-avatar>
           </v-col>
           <v-col
-            class="d-flex"
+            class="d-flex align-center"
             cols="12"
             sm="9">
             <v-card-title><span class="ml-3">{{ props.customer.lastName }}, {{ props.customer.firstName }}</span></v-card-title>
             <v-spacer/>
-            <v-icon v-if="customer.locked" color="red" class="pr-5" icon="mdi-lock"></v-icon>
+            <v-icon v-if="customer.locked" color="primary" class="pr-5" icon="mdi-lock"></v-icon>
           </v-col>
         </v-row>
       </v-card>
     </template>
     <template v-slot:default>
-      <v-card height="700" >
-        <v-card-item >
-          <CustomerAdminCard :customer :products @cancelPurchase="isActive = false" @submitPurchase="submitPurchase"></CustomerAdminCard>
-        </v-card-item>
-      </v-card>
+      <CustomerAdminCard :customer :products @cancel-edit="isActive = false"></CustomerAdminCard>
     </template>
   </v-dialog>
 </template>

@@ -15,7 +15,7 @@ const message = storeToRefs(notifyValidationStore)
     v-model="notifyValidationStore.show"
     timer="top"
     transition="slide-x-transition"
-    location="top right"
+    location="top left"
     z-index="2500"
   >
     <h3>Achtung</h3>

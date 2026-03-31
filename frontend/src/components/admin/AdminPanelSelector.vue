@@ -19,7 +19,7 @@ const handleSelection = (route) => {
           <div class="text-h4 font-weight-medium">Verwaltung</div>
         </v-col>
         <v-col cols="12" sm="2" class="d-flex justify-end">
-          <v-btn color="red" @click="emit('closePanel')" icon="mdi-close"></v-btn>
+          <v-btn color="primary" @click="emit('closePanel')" icon="mdi-close"></v-btn>
         </v-col>
       </v-row>
     </v-card-title>
@@ -28,7 +28,7 @@ const handleSelection = (route) => {
       <v-row>
         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
           <div class="d-flex flex-column align-center text-center">
-            <v-btn @click="handleSelection('/customer-cp')" border="md" rounded="circle" size="80" color="red">
+            <v-btn @click="handleSelection('/customer-cp')" border="md" rounded="circle" size="80" color="primary">
               <v-icon icon="mdi-account-eye" size="60"></v-icon>
             </v-btn>
             <div class="pt-2 text-h6">Nutzer Verwalten</div>
@@ -36,7 +36,7 @@ const handleSelection = (route) => {
         </v-col>
         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
           <div class="d-flex flex-column align-center text-center">
-            <v-btn @click="handleSelection('/product-cp')" border="md" rounded="circle" size="80" color="red">
+            <v-btn @click="handleSelection('/product-cp')" border="md" rounded="circle" size="80" color="primary">
               <v-icon icon="mdi-store-edit" size="60"></v-icon>
             </v-btn>
             <div class="pt-2 text-h6">Produkte Verwalten</div>
@@ -44,7 +44,7 @@ const handleSelection = (route) => {
         </v-col>
         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
           <div class="d-flex flex-column align-center text-center">
-            <v-btn border="md" rounded="circle" size="80" color="red">
+            <v-btn border="md" rounded="circle" size="80" color="primary">
               <v-icon icon="mdi-exit-to-app" size="60"></v-icon>
             </v-btn>
             <div class="pt-2 text-h6">Abmelden</div>

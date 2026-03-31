@@ -39,7 +39,7 @@ onBeforeUnmount(() => {
 
 function validateBadgeColor(product){
   if (product.index === 0) return "transparent"
-  return "red"
+  return "primary"
 }
 
 function validateBadgeVision(product){

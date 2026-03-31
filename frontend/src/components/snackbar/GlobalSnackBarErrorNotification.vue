@@ -14,7 +14,7 @@ const message = storeToRefs(errorStore)
     timeout="10000"
     v-model="errorStore.show"
     timer="top"
-    location="top right"
+    location="top left"
     z-index="2500"
   >
     <h3>Ooops, da ist wohl etwas schief gelaufen...</h3>

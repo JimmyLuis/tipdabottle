@@ -107,9 +107,9 @@ const handlePurchaseSelect = (purchase) => {
             cols="12"
             sm="4">
             <div class="pr-2 d-flex align-center">
-              <v-btn class="mr-3" color="red" icon="mdi-close" @click="emit('cancelPurchaseEdit')"></v-btn>
+              <v-btn class="mr-3" color="primary" icon="mdi-close" @click="emit('cancelPurchaseEdit')"></v-btn>
               <v-divider vertical thickness="1" opacity="0.15"></v-divider>
-              <v-btn class="ml-3" color="green" icon="mdi-arrow-right" @click="emit('submitPurchaseEdit', selectedPurchases)"></v-btn>
+              <v-btn class="ml-3" color="secondary" icon="mdi-arrow-right" @click="emit('submitPurchaseEdit', selectedPurchases)"></v-btn>
             </div>
           </v-col>
         </v-row>

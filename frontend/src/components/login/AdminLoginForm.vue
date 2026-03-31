@@ -45,7 +45,7 @@ const visible = ref(false)
 
       <v-btn
         class="mb-8"
-        color="red"
+        color="primary"
         size="large"
         variant="tonal"
         block

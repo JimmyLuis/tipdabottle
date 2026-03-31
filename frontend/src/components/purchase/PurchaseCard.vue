@@ -72,14 +72,14 @@ function submitPurchase(){
             <div class="pr-3">
               {{props.customer?.lastName}}<span v-if="!!props.customer.lastName">,</span>
               {{props.customer?.firstName}}
-              <v-card-subtitle>
+              <v-card-subtitle class="pa-0">
                 <div class="d-flex justify-start align-center pb-1">
                   <div class="d-flex">
                     <h3 class="pr-3"> Saldo: </h3>
                     <div class="d-inline">
                       <h3 class="justify-end d-flex">{{props.customer.balance.toFixed(2)}} €</h3>
                       <v-slide-x-transition hide-on-leave>
-                        <h3 v-if="purchaseWorth > 0.0" class="text-red-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h3>
+                        <h3 v-if="purchaseWorth > 0.0" class="text-primary-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h3>
                       </v-slide-x-transition>
                       <h3 v-if="!purchaseWorth > 0.0" class="text-transparent">- {{purchaseWorth.toFixed(2)}} €</h3>
                     </div>
@@ -109,9 +109,9 @@ function submitPurchase(){
             cols="12"
           sm="4">
             <div class="pr-2 d-flex align-center pb-8">
-              <v-btn class="mr-3" color="red" icon="mdi-close" @click="emit('cancelPurchase')"></v-btn>
+              <v-btn class="mr-3" color="primary" icon="mdi-close" @click="emit('cancelPurchase')"></v-btn>
               <v-divider vertical thickness="1" opacity="0.15" color=""></v-divider>
-              <v-btn class="ml-3" color="green" icon="mdi-arrow-right" @click="submitPurchase()"></v-btn>
+              <v-btn class="ml-3" color="secondary" icon="mdi-arrow-right" @click="submitPurchase()"></v-btn>
             </div>
           </v-col>
         </v-row>
