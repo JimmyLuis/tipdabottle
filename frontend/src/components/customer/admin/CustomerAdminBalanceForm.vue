@@ -18,6 +18,8 @@ const props = defineProps({
 const form = ref(null)
 const isValid = ref(false)
 
+const emit = defineEmits(['submitEdit'])
+
 // Betrag kann positiv oder negativ sein
 const amount = ref(null)
 const reason = ref('')
@@ -33,7 +35,7 @@ const submit = async () => {
   if (!valid) return
   await updateCustomerBalance(props.customer.id, parseFloat(amount.value));
   useNotifyStore().set('Saldo geändert!')
-
+  emit('submitEdit')
 }
 </script>
 <template>

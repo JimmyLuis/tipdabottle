@@ -5,7 +5,7 @@ import {useNotifyStore} from "@/stores/app.js";
 import {createProduct} from "@/api/productApi.js";
 
 
-const emit = defineEmits(['cancelEdit'])
+const emit = defineEmits(['cancelEdit', 'refreshAllProducts'])
 
 const product = ref({
   id: 0,
@@ -30,11 +30,13 @@ const rules = {
   required: v => !!v || 'Pflichtfeld',
   positive: v => v > 0 || 'Muss > 0 sein',
   nonNegative: v => v >= 0 || 'Muss ≥ 0 sein',
+  containerSet: v => product.value.container.stock > 0 && product.value.container.capacity > 0 || 'Setze zuerst Kapazität und Bestand des Kontainers'
 }
 
-const submit = () => {
+const submit = async () => {
   useNotifyStore().set('Das Produkt wurde erstellt.')
-  createProduct(product.value)
+  await createProduct(product.value)
+  emit('refreshAllProducts')
   emit("cancelEdit")
 }
 
@@ -46,6 +48,18 @@ watch(
     product.value.container.category = newCategory
   }
 )
+watch(() => [product.value.container.capacity, product.value.container.stock, product.value.stock],
+  ([newContainerCap, newContainerStock, newProductStock], [oldContainerCap, oldContainerStock, oldProductStock]) => {
+    if (oldContainerCap !== newContainerCap){
+      product.value.container.stock = Math.ceil(product.value.stock / newContainerCap)
+    }
+    if (oldContainerStock !== newContainerStock){
+      product.value.stock = product.value.container.capacity * newContainerStock
+    }
+  }
+)
+
+
 </script>
 
 <template>
@@ -104,7 +118,8 @@ watch(
                 v-model.number="product.stock"
                 label="Bestand Stk. einzeln"
                 type="number"
-                :rules="[rules.required, rules.nonNegative]"
+                disabled
+                :rules="[rules.required, rules.nonNegative, rules.containerSet]"
               />
 
             </v-form>
@@ -155,7 +170,7 @@ watch(
 
       </v-row>
     </v-card-actions>
-    <v-card-actions><v-btn @click="submit" color="primary" block border>Speichern</v-btn></v-card-actions>
+    <v-card-actions><v-btn @click="submit" :disabled="!valid" color="primary" block border>Speichern</v-btn></v-card-actions>
   </v-card>
 </template>
 

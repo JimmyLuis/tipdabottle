@@ -43,3 +43,20 @@ export async function updateCustomerBalance(id, addedBalance){
   }
   return await apiFetch(`/customers/${id}/balance`, options)
 }
+
+export async function createCustomer(customer){
+  let mappedCustomer = {
+    firstName: customer.firstName,
+    lastName: customer.lastName,
+    email: customer.email,
+    community: customer.community
+  }
+  let options = {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(mappedCustomer)
+  }
+  return await apiFetch(`/customers`, options)
+}

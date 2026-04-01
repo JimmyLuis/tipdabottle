@@ -1,7 +1,5 @@
 <script setup>
-import {purchaseProducts} from "@/api/purchaseApi.js";
 import {ref} from "vue";
-import {useNotifyStore} from "@/stores/app.js";
 import ProductAdminCard from "@/components/product/admin/ProductAdminCard.vue";
 
 const props = defineProps({
@@ -20,23 +18,7 @@ const props = defineProps({
   }
 })
 
-const notify = useNotifyStore()
-
-const emit = defineEmits(['refreshProduct'])
-
 const isActive = ref(false);
-
-
-const submitPurchase = async function(submitProducts) {
-  await purchaseProducts(props.customer.id, submitProducts.values().toArray())
-    .then(res => {
-      if (res)
-        notify.set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
-    })
-  isActive.value = false
-  emit('refreshCustomer', props.customer)
-
-}
 
 </script>
 

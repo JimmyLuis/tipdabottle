@@ -6,6 +6,8 @@ import {getAllCustomers, getAllCustomersWithInactive, getCustomerById} from "@/a
 import {getAllProducts} from "@/api/productApi.js";
 import {useNotifyValidationStore} from "@/stores/app.js";
 import CustomerAdminSlot from "@/components/customer/admin/CustomerAdminSlot.vue";
+import ProductAdminAddSlot from "@/components/product/admin/add/ProductAdminAddSlot.vue";
+import CustomerAdminAddSlot from "@/components/customer/admin/add/CustomerAdminAddSlot.vue";
 
 
 const customers = ref([]);
@@ -22,13 +24,7 @@ onMounted(async () => {
     }
     customersDummy.value.push(customer);
   }
-  customers.value = await getAllCustomersWithInactive();
-  customers.value.sort((a, b) => {
-    if (b.community !== a.community) {
-      return b.community - a.community
-    }
-    return a.lastName.localeCompare(b.lastName)
-  })
+  await refreshAllCustomers()
   products.value = await getAllProducts();
 })
 
@@ -44,6 +40,15 @@ const refreshCustomer = async (customer) => {
   })
 }
 
+const refreshAllCustomers = async () => {
+  customers.value = await getAllCustomersWithInactive();
+  customers.value.sort((a, b) => {
+    if (b.community !== a.community) {
+      return b.community - a.community
+    }
+    return a.lastName.localeCompare(b.lastName)
+  })
+}
 
 
 </script>
@@ -51,6 +56,9 @@ const refreshCustomer = async (customer) => {
 <template>
   <v-container fluid class="px-5">
     <v-row no-gutters v-if="customers.length > 0">
+      <v-col cols="12" sm="12">
+        <CustomerAdminAddSlot @refresh-all-customers="refreshAllCustomers"/>
+      </v-col>
       <v-col
         v-for="customer in customers"
         :key="customer.id"
@@ -58,7 +66,7 @@ const refreshCustomer = async (customer) => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <CustomerAdminSlot v-if="customers" :customer :products @refresh-customer="refreshCustomer"/>
+          <CustomerAdminSlot v-if="customers" :customer :products @refresh-customer="refreshAllCustomers"/>
         </v-sheet>
       </v-col>
     </v-row>

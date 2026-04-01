@@ -21,6 +21,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['refreshCustomer'])
+
 const isActive = ref(false);
 
 </script>
@@ -59,7 +61,7 @@ const isActive = ref(false);
       </v-card>
     </template>
     <template v-slot:default>
-      <CustomerAdminCard :customer :products @cancel-edit="isActive = false"></CustomerAdminCard>
+      <CustomerAdminCard :customer :products @cancel-edit="isActive = false" @submit-edit="emit('refreshCustomer')"/>
     </template>
   </v-dialog>
 </template>

@@ -60,7 +60,7 @@ const emit = defineEmits(['cancelEdit', 'submitEdit'])
       <v-banner class="pt-0"></v-banner>
     </v-card-text>
     <v-card-item class="pt-0 px-0" >
-      <CustomerAdminEditForm :customer></CustomerAdminEditForm>
+      <CustomerAdminEditForm :customer @submit-edit="emit('submitEdit')" />
     </v-card-item>
   </v-card>
 </template>

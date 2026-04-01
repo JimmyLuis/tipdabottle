@@ -19,6 +19,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits('submitEdit')
+
 // Validation Regeln
 const rules = {
   required: v => !!v || 'Pflichtfeld',
@@ -32,6 +34,7 @@ const save = async () => {
 
   useNotifyStore().set('Änderungen gespeichert!')
   await updateCustomer(props.customer)
+  emit('submitEdit')
 }
 </script>
 
@@ -89,7 +92,7 @@ const save = async () => {
         </v-card>
       </v-col>
       <v-col cols="12" sm="4" class="d-flex flex-column justify-center">
-        <CustomerAdminBalanceForm :customer/>
+        <CustomerAdminBalanceForm @submit-edit="emit('submitEdit')" :customer/>
       </v-col>
     </v-row>
   </v-container>

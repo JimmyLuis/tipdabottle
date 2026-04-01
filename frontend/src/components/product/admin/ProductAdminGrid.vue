@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {getAllProducts} from "@/api/productApi.js";
 import ProductAdminSlot from "@/components/product/admin/ProductAdminSlot.vue";
-import ProductAdminAddSlot from "@/components/product/admin/ProductAdminAddSlot.vue";
+import ProductAdminAddSlot from "@/components/product/admin/add/ProductAdminAddSlot.vue";
 
 
 const products = ref([]);
@@ -20,8 +20,8 @@ onMounted(async () => {
   products.value = await getAllProducts();
 })
 
-const refreshProduct = (product) => {
-
+const refreshAllProducts = async () => {
+  products.value = await getAllProducts();
 }
 
 </script>
@@ -30,7 +30,7 @@ const refreshProduct = (product) => {
   <v-container fluid class="px-5">
     <v-row no-gutters v-if="products.length > 0">
       <v-col cols="12" sm="12">
-        <ProductAdminAddSlot/>
+        <ProductAdminAddSlot @refresh-all-products="refreshAllProducts"/>
       </v-col>
       <v-col
         v-for="product in products"
@@ -39,7 +39,7 @@ const refreshProduct = (product) => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <ProductAdminSlot v-if="products" :product @refresh-product="refreshProduct"/>
+          <ProductAdminSlot v-if="products" :product/>
         </v-sheet>
       </v-col>
     </v-row>
