@@ -1,0 +1,24 @@
+package de.lbeck.tipdabottle.purchase.dto.viewstrategy;
+
+import de.lbeck.tipdabottle.common.viewstrategy.ViewStrategy;
+import de.lbeck.tipdabottle.purchase.model.Purchase;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PurchasePublicStrategy implements ViewStrategy<Purchase> {
+    @Override
+    public boolean supports(Authentication auth, Purchase entity) {
+        return true;
+    }
+
+    @Override
+    public Object map(Purchase entity) {
+        return null;
+    }
+
+    @Override
+    public Class<Purchase> getType() {
+        return null;
+    }
+}

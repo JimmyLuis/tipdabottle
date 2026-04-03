@@ -1,7 +1,8 @@
 package de.lbeck.tipdabottle.container.service;
 
-import de.lbeck.tipdabottle.container.dto.ContainerDTO;
+import de.lbeck.tipdabottle.container.dto.out.ResponseContainerPublicDTO;
 import de.lbeck.tipdabottle.container.dto.ContainerMapper;
+import de.lbeck.tipdabottle.container.model.Container;
 import de.lbeck.tipdabottle.container.repository.ContainerRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,9 @@ public class ContainerService {
         this.mapper = mapper;
     }
 
-    public List<ContainerDTO> getAllContainers() {
-        List<ContainerDTO> customerDTOList = new ArrayList<>();
-        containerRepository.findAll().forEach(container -> {
-            customerDTOList.add(mapper.toDTO(container));
-        });
-        return customerDTOList;
+    public List<Container> getAllContainers() {
+        List<Container> customerList = new ArrayList<>();
+        containerRepository.findAll().forEach(customerList::add);
+        return customerList;
     }
 }

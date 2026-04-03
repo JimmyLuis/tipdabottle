@@ -1,4 +1,4 @@
-package de.lbeck.tipdabottle.customer.dto.request;
+package de.lbeck.tipdabottle.customer.dto.in;
 
 import jakarta.validation.constraints.NotNull;
 

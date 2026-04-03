@@ -2,14 +2,15 @@ package de.lbeck.tipdabottle.purchase.service;
 
 
 import de.lbeck.tipdabottle.container.model.Container;
-import de.lbeck.tipdabottle.customer.dto.response.ResponseCustomerDTO;
-import de.lbeck.tipdabottle.customer.dto.CustomerMapper;
 import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.customer.service.CustomerService;
-import de.lbeck.tipdabottle.product.dto.ProductMapper;
 import de.lbeck.tipdabottle.product.model.Product;
 import de.lbeck.tipdabottle.product.service.ProductService;
 import de.lbeck.tipdabottle.purchase.dto.*;
+import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseCreateDTO;
+import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseReverseDTO;
+import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseAsGroupDTO;
+import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseDTO;
 import de.lbeck.tipdabottle.purchase.exception.PurchaseDeniedException;
 import de.lbeck.tipdabottle.purchase.exception.PurchaseNotFoundException;
 import de.lbeck.tipdabottle.purchase.model.Purchase;
@@ -33,83 +34,78 @@ public class PurchaseService {
     private final PurchaseMapper purchaseMapper;
     private final ProductService productService;
     private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
-    private final ProductMapper productMapper;
     private final PurchaseGroupRepository purchaseGroupRepository;
     private final PurchaseResponseMapper purchaseResponseMapper;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, ProductService productService, CustomerService customerService, CustomerMapper customerMapper, ProductMapper productMapper, PurchaseGroupRepository purchaseGroupRepository, PurchaseResponseMapper purchaseResponseMapper) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, ProductService productService, CustomerService customerService, PurchaseGroupRepository purchaseGroupRepository, PurchaseResponseMapper purchaseResponseMapper) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.productService = productService;
         this.customerService = customerService;
-        this.customerMapper = customerMapper;
-        this.productMapper = productMapper;
         this.purchaseGroupRepository = purchaseGroupRepository;
         this.purchaseResponseMapper = purchaseResponseMapper;
     }
 
-    public Page<PurchaseResponseAsGroupDTO> getAllPurchases(int page, int size){
+    public Page<ResponsePurchaseAsGroupDTO> getAllPurchases(int page, int size){
         Pageable pageable = PageRequest.of(
                 page,
                 size
         );
         Page<PurchaseGroup> groupPage = purchaseGroupRepository.findGroupIdsOrdered(pageable);
         List<Purchase> entities = purchaseRepository.findAllByPurchaseGroupIn(groupPage.getContent());
-        List<PurchaseResponseDTO> dtos = new ArrayList<>();
+        List<ResponsePurchaseDTO> dtos = new ArrayList<>();
         entities.forEach(purchase -> dtos.add(purchaseResponseMapper.toDTO(purchase)));
-        Map<Long, List<PurchaseResponseDTO>> mappedAndGroupedPurchases = dtos.stream().collect(Collectors.groupingBy(
-                PurchaseResponseDTO::purchaseGroupId,
+        Map<Long, List<ResponsePurchaseDTO>> mappedAndGroupedPurchases = dtos.stream().collect(Collectors.groupingBy(
+                ResponsePurchaseDTO::purchaseGroupId,
                 () -> new TreeMap<>(Comparator.reverseOrder()),
                 Collectors.toList()
         ));
-        List<PurchaseResponseAsGroupDTO> responseDtos = new ArrayList<>();
+        List<ResponsePurchaseAsGroupDTO> responseDtos = new ArrayList<>();
         mappedAndGroupedPurchases.forEach((key, value) -> {
-            responseDtos.add(new PurchaseResponseAsGroupDTO(key, value));
+            responseDtos.add(new ResponsePurchaseAsGroupDTO(key, value));
         });
 
         return new PageImpl<>(responseDtos, pageable, groupPage.getTotalElements());
     }
 
-    public PurchaseDTO getPurchaseById(Long id){
+    public ResponsePurchaseDTO getPurchaseById(Long id){
         Purchase purchase = purchaseRepository.findById(id)
                 .orElseThrow(() -> new PurchaseNotFoundException("Purchase with id " + id + " not found"));
-        return purchaseMapper.toDTO(purchase);
+        return purchaseResponseMapper.toDTO(purchase);
     }
 
-    public List<PurchaseResponseDTO> getPurchasesByGroup(Long groupId){
-        List<PurchaseResponseDTO> purchaseDTOList = new ArrayList<>();
+    public List<ResponsePurchaseDTO> getPurchasesByGroup(Long groupId){
+        List<ResponsePurchaseDTO> purchaseDTOList = new ArrayList<>();
         purchaseRepository.findAllByPurchaseGroup_Id(groupId).forEach(purchase -> purchaseDTOList.add(purchaseResponseMapper.toDTO(purchase)));
         if (purchaseDTOList.isEmpty()) throw new PurchaseNotFoundException("Purchases within group id " + groupId + " not found");
         return purchaseDTOList;
     }
 
-    public Page<PurchaseResponseDTO> getPurchasesByCustomer(Long customerId, int page, int size){
+    public Page<ResponsePurchaseDTO> getPurchasesByCustomer(Long customerId, int page, int size){
         Pageable pageable = PageRequest.of(
                 page,
                 size,
                 Sort.by("creationTime").descending()
         );
-        List<PurchaseResponseDTO> purchaseDTOList = new ArrayList<>();
+        List<ResponsePurchaseDTO> purchaseDTOList = new ArrayList<>();
         Page<Purchase> purchasePage =  purchaseRepository.findAllByCustomer_Id(customerId, pageable);
         if (purchasePage.isEmpty()) throw new PurchaseNotFoundException("Purchases of customer with id " + customerId + " not found");
         purchasePage.forEach(purchase -> purchaseDTOList.add(purchaseResponseMapper.toDTO(purchase)));
         return new PageImpl<>(purchaseDTOList, pageable, purchasePage.getTotalElements());
     }
 
-    public List<PurchaseResponseDTO> createPurchases(Long customerId , List<PurchaseCreateDTO> purchaseCreateDTOList){
-        if (purchaseCreateDTOList.isEmpty()) throw new PurchaseDeniedException("Cant submit purchase without any products!");
-        ResponseCustomerDTO responseCustomerDTO = customerService.getCustomerById(customerId);
-        validateCustomerPurchase(responseCustomerDTO, purchaseCreateDTOList);
-        Customer customer = customerMapper.toEntity(responseCustomerDTO);
+    public List<ResponsePurchaseDTO> createPurchases(Long customerId , List<RequestPurchaseCreateDTO> requestPurchaseCreateDTOList){
+        if (requestPurchaseCreateDTOList.isEmpty()) throw new PurchaseDeniedException("Cant submit purchase without any products!");
+        Customer customer = customerService.getCustomerById(customerId);
+        validateCustomerPurchase(customer, requestPurchaseCreateDTOList);
         AtomicReference<Double> customerBalance = new AtomicReference<>(customer.getBalance());
 
         List<Product> productList = new ArrayList<>();
         PurchaseGroup group = purchaseGroupRepository.save(new PurchaseGroup());
-        List<PurchaseResponseDTO> purchases = new ArrayList<>();
+        List<ResponsePurchaseDTO> purchases = new ArrayList<>();
 
-        purchaseCreateDTOList.forEach(purchase -> {
-            Product curProduct = productMapper.toEntity(productService.getProductById(purchase.product_id()));
+        requestPurchaseCreateDTOList.forEach(purchase -> {
+            Product curProduct = productService.getProductById(purchase.product_id());
             productList.add(purchaseProduct(curProduct, purchase));
             customerBalance.accumulateAndGet(curProduct.getPrice(), (balance, cost) -> balance - cost * purchase.quantity());
             purchases.add(submitPurchase(customer, curProduct, group, purchase));
@@ -128,15 +124,15 @@ public class PurchaseService {
 
 
 
-    private PurchaseResponseDTO submitPurchase(Customer customer, Product product, PurchaseGroup group, PurchaseCreateDTO purchaseCreateDTO){
+    private ResponsePurchaseDTO submitPurchase(Customer customer, Product product, PurchaseGroup group, RequestPurchaseCreateDTO requestPurchaseCreateDTO){
         Purchase purchase = new Purchase(
                 null,
                 group,
                 product,
                 customer,
                 Timestamp.from(Instant.now()),
-                product.getPrice() * purchaseCreateDTO.quantity(),
-                purchaseCreateDTO.quantity(),
+                product.getPrice() * requestPurchaseCreateDTO.quantity(),
+                requestPurchaseCreateDTO.quantity(),
                 false,
                 null,
                 null
@@ -145,8 +141,8 @@ public class PurchaseService {
         return purchaseResponseMapper.toDTO(purchaseRepository.save(purchase));
     }
 
-    private Product purchaseProduct(Product product, PurchaseCreateDTO purchaseCreateDTO){
-        product.setStock(product.getStock() - purchaseCreateDTO.quantity());
+    private Product purchaseProduct(Product product, RequestPurchaseCreateDTO requestPurchaseCreateDTO){
+        product.setStock(product.getStock() - requestPurchaseCreateDTO.quantity());
         Container prodContainer = product.getContainer();
         double containerStock = (double) product.getStock() / prodContainer.getCapacity();
         if (containerStock < prodContainer.getStock()){
@@ -155,32 +151,31 @@ public class PurchaseService {
         return product;
     }
 
-    private void validateCustomerPurchase(ResponseCustomerDTO customer, List<PurchaseCreateDTO> purchaseCreateDTOList){
-        if (!customer.activeProfile()) throw new PurchaseDeniedException("Customer " + customer.email() + " is not an active profile");
-        if (customer.locked()) throw new PurchaseDeniedException("Customer " + customer.email() + " is blocked for purchasing");
+    private void validateCustomerPurchase(Customer customer, List<RequestPurchaseCreateDTO> requestPurchaseCreateDTOList){
+        if (!customer.getActiveProfile()) throw new PurchaseDeniedException("Customer " + customer.getEmail() + " is not an active profile");
+        if (customer.getLocked()) throw new PurchaseDeniedException("Customer " + customer.getEmail() + " is blocked for purchasing");
 
-        purchaseCreateDTOList.forEach(purchase -> {
+        requestPurchaseCreateDTOList.forEach(purchase -> {
             //validiert ob alle produkte kaufbar sind
             productService.getProductById(purchase.product_id());
         });
     }
 
-    public List<PurchaseResponseDTO> reversePurchases(Long customerId , List<PurchaseReverseDTO> purchaseReverseDTOList) {
-        ResponseCustomerDTO responseCustomerDTO = customerService.getCustomerById(customerId);
-        validateCustomerPurchaseReverse(responseCustomerDTO, purchaseReverseDTOList);
+    public List<ResponsePurchaseDTO> reversePurchases(Long customerId , List<RequestPurchaseReverseDTO> requestPurchaseReverseDTOList) {
+        Customer customer = customerService.getCustomerById(customerId);
+        validateCustomerPurchaseReverse(customer, requestPurchaseReverseDTOList);
 
-        Customer customer = customerMapper.toEntity(responseCustomerDTO);
         AtomicReference<Double> customerBalance = new AtomicReference<>(customer.getBalance());
 
         List<Product> productList = new ArrayList<>();
 
-        List<PurchaseResponseDTO> purchases = new ArrayList<>();
+        List<ResponsePurchaseDTO> purchases = new ArrayList<>();
 
         PurchaseGroup reversedPurchaseGroup = purchaseGroupRepository.save(new PurchaseGroup());
 
-        purchaseReverseDTOList.forEach(purchase -> {
+        requestPurchaseReverseDTOList.forEach(purchase -> {
             Purchase purchaseEntity = purchaseRepository.findById(purchase.id()).get();
-            Product curProduct = productMapper.toEntity(productService.getProductById(purchase.product_id()));
+            Product curProduct = productService.getProductById(purchase.product_id());
             productList.add(reversePurchaseProduct(curProduct, purchaseEntity));
             customerBalance.accumulateAndGet(curProduct.getPrice() * purchaseEntity.getQuantity(), Double::sum);
             purchases.add(submitReversePurchase(customer, curProduct, reversedPurchaseGroup, purchaseEntity));
@@ -194,7 +189,7 @@ public class PurchaseService {
 
         return purchases;
     }
-    private PurchaseResponseDTO submitReversePurchase(Customer customer, Product product, PurchaseGroup reversedGroup, Purchase purchase){
+    private ResponsePurchaseDTO submitReversePurchase(Customer customer, Product product, PurchaseGroup reversedGroup, Purchase purchase){
 
         Purchase reversedPurchase = new Purchase(
                 null,
@@ -225,10 +220,10 @@ public class PurchaseService {
         return product;
     }
 
-    private void validateCustomerPurchaseReverse(ResponseCustomerDTO customer, List<PurchaseReverseDTO> purchaseReverseDTOList){
-        if (!customer.activeProfile()) throw new PurchaseDeniedException("Customer " + customer.email() + " is not an active profile");
+    private void validateCustomerPurchaseReverse(Customer customer, List<RequestPurchaseReverseDTO> requestPurchaseReverseDTOList){
+        if (!customer.getActiveProfile()) throw new PurchaseDeniedException("Customer " + customer.getEmail() + " is not an active profile");
 
-        purchaseReverseDTOList.forEach(purchase -> {
+        requestPurchaseReverseDTOList.forEach(purchase -> {
             //validiert ob alle purchases ex. und reversebar sind
             Purchase curPurchase = purchaseRepository.findById(purchase.id())
                             .orElseThrow(() -> new PurchaseNotFoundException("Purchase " + purchase.id() + " not found"));
@@ -239,8 +234,8 @@ public class PurchaseService {
             if (curPurchase.getReversed() || curPurchase.getReversedReference() != null || curPurchase.getReversedGroupReference() != null) { //todo properties value
                 throw new PurchaseDeniedException("Purchase with product name " + curPurchase.getProduct().getName() + " is already reversed");
             }
-            if (!Objects.equals(curPurchase.getCustomer().getId(), customer.id())){
-                throw new PurchaseDeniedException("Customer " + customer.email() + " is not the owner of the purchase");
+            if (!Objects.equals(curPurchase.getCustomer().getId(), customer.getId())){
+                throw new PurchaseDeniedException("Customer " + customer.getEmail() + " is not the owner of the purchase");
             }
         });
     }

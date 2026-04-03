@@ -1,10 +1,9 @@
 package de.lbeck.tipdabottle.customer.service;
 
 import de.lbeck.tipdabottle.customer.dto.*;
-import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerBalanceDTO;
-import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerCreateDTO;
-import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerUpdateDTO;
-import de.lbeck.tipdabottle.customer.dto.response.ResponseCustomerDTO;
+import de.lbeck.tipdabottle.customer.dto.in.RequestCustomerBalanceDTO;
+import de.lbeck.tipdabottle.customer.dto.in.RequestCustomerCreateDTO;
+import de.lbeck.tipdabottle.customer.dto.in.RequestCustomerUpdateDTO;
 import de.lbeck.tipdabottle.customer.exception.CustomerNotFoundException;
 import de.lbeck.tipdabottle.customer.exception.EmailAlreadyExistsException;
 import de.lbeck.tipdabottle.customer.model.Customer;
@@ -26,33 +25,27 @@ public class CustomerService {
         this.customerMapper = customerMapper;
     }
 
-    public List<ResponseCustomerDTO> getAllCustomers(Boolean listInactiveProfiles) {
-        List<ResponseCustomerDTO> responseCustomerDTOS = new ArrayList<>();
+    public List<Customer> getAllCustomers(Boolean listInactiveProfiles) {
+        List<Customer> responseCustomers = new ArrayList<>();
         if (listInactiveProfiles) {
-            customerRepository.findAll().forEach(customer -> {
-                responseCustomerDTOS.add(customerMapper.toDTO(customer));
-            });
+            customerRepository.findAll().forEach(responseCustomers::add);
         } else {
-            customerRepository.findAllByActiveProfileIsTrue().forEach(customer -> {
-                responseCustomerDTOS.add(customerMapper.toDTO(customer));
-            });
+            customerRepository.findAllByActiveProfileIsTrue().forEach(responseCustomers::add);
         }
-        return responseCustomerDTOS;
+        return responseCustomers;
     }
 
-    public ResponseCustomerDTO getCustomerById(Long id) {
-        Customer customer = customerRepository.findById(id)
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
-        return customerMapper.toDTO(customer);
     }
 
-    public ResponseCustomerDTO getCustomerEMail(String email) {
-        Customer customer = customerRepository.findByEmail(email)
+    public Customer getCustomerEMail(String email) {
+        return customerRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with email " + email + " not found"));
-        return customerMapper.toDTO(customer);
     }
 
-    public ResponseCustomerDTO createCustomer(RequestCustomerCreateDTO requestCustomerCreateDTO) {
+    public Customer createCustomer(RequestCustomerCreateDTO requestCustomerCreateDTO) {
         Customer customer = customerMapper.toEntity(requestCustomerCreateDTO);
         customerRepository.findByEmail(requestCustomerCreateDTO.email())
                 .ifPresent(mailCustomer -> {
@@ -60,13 +53,11 @@ public class CustomerService {
                 });
         customer.setLocked(false);
         customer.setActiveProfile(true);
-        customer = customerRepository.save(customer);
-        return customerMapper.toDTO(customer);
+        return customerRepository.save(customer);
     }
 
-    public ResponseCustomerDTO updateCustomer(Long id, RequestCustomerUpdateDTO requestCustomerUpdateDTO) {
-        Customer customer = customerMapper.toEntity(getCustomerById(id));
-        Customer finalCustomer = customer;
+    public Customer updateCustomer(Long id, RequestCustomerUpdateDTO requestCustomerUpdateDTO) {
+        Customer customer = getCustomerById(id);
         customerRepository.findByEmail(requestCustomerUpdateDTO.email())
                 .ifPresent(mailCustomer -> {
                     if (mailCustomer.getEmail().equals(requestCustomerUpdateDTO.email()) && !Objects.equals(mailCustomer.getId(), id)) {
@@ -74,19 +65,17 @@ public class CustomerService {
                     }
                 });
         customer = customerMapper.toEntity(requestCustomerUpdateDTO, customer);
-        customer = customerRepository.save(customer);
-        return customerMapper.toDTO(customer);
+        return  customerRepository.save(customer);
     }
 
-    public ResponseCustomerDTO updateCustomer(Customer customer){
-        return customerMapper.toDTO(customerRepository.save(customer));
+    public Customer updateCustomer(Customer customer){
+        return customerRepository.save(customer);
     }
 
-    public ResponseCustomerDTO changeCustomerBalance(Long id, RequestCustomerBalanceDTO requestCustomerBalanceDTO) {
-        Customer customer = customerMapper.toEntity(getCustomerById(id));
+    public Customer changeCustomerBalance(Long id, RequestCustomerBalanceDTO requestCustomerBalanceDTO) {
+        Customer customer = getCustomerById(id);
         customer.setBalance(customer.getBalance() + requestCustomerBalanceDTO.addedBalance());
-        customer = customerRepository.save(customer);
-        return customerMapper.toDTO(customer);
+        return customerRepository.save(customer);
     }
 
 }

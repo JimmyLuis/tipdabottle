@@ -1,6 +1,9 @@
 package de.lbeck.tipdabottle.purchase.controller;
 
-import de.lbeck.tipdabottle.purchase.dto.*;
+import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseCreateDTO;
+import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseReverseDTO;
+import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseAsGroupDTO;
+import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseDTO;
 import de.lbeck.tipdabottle.purchase.service.PurchaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -9,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Validated
 @RestController
@@ -23,7 +25,7 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public Page<PurchaseResponseAsGroupDTO> getAllPurchases(
+    public Page<ResponsePurchaseAsGroupDTO> getAllPurchases(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") @Max(100) int size
     ){
@@ -31,17 +33,17 @@ public class PurchaseController {
     }
 
     @GetMapping("/{id}")
-    public PurchaseDTO getPurchaseById(@PathVariable Long id){
+    public ResponsePurchaseDTO getPurchaseById(@PathVariable Long id){
         return purchaseService.getPurchaseById(id);
     }
 
     @GetMapping("/group/{groupId}")
-    public List<PurchaseResponseDTO> getPurchasesByGroup(@PathVariable Long groupId){
+    public List<ResponsePurchaseDTO> getPurchasesByGroup(@PathVariable Long groupId){
         return purchaseService.getPurchasesByGroup(groupId);
     }
 
     @GetMapping("/customer/{customerId}")
-    public Page<PurchaseResponseDTO> getPurchasesByCustomer(
+    public Page<ResponsePurchaseDTO> getPurchasesByCustomer(
             @PathVariable Long customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") @Max(100) int size){
@@ -49,12 +51,12 @@ public class PurchaseController {
     }
 
     @PostMapping("/customer/{customerId}")
-    public List<PurchaseResponseDTO> createPurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid PurchaseCreateDTO> purchaseCreateDTOList){
-        return purchaseService.createPurchases(customerId, purchaseCreateDTOList);
+    public List<ResponsePurchaseDTO> createPurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid RequestPurchaseCreateDTO> requestPurchaseCreateDTOList){
+        return purchaseService.createPurchases(customerId, requestPurchaseCreateDTOList);
     }
 
     @DeleteMapping("/customer/{customerId}")
-    public List<PurchaseResponseDTO> deletePurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid PurchaseReverseDTO> purchaseReverseDTOList){
-        return purchaseService.reversePurchases(customerId, purchaseReverseDTOList);
+    public List<ResponsePurchaseDTO> deletePurchases(@PathVariable Long customerId, @Valid @RequestBody List<@Valid RequestPurchaseReverseDTO> requestPurchaseReverseDTOList){
+        return purchaseService.reversePurchases(customerId, requestPurchaseReverseDTOList);
     }
 }

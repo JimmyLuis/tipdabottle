@@ -1,18 +1,19 @@
-package de.lbeck.tipdabottle.product.dto;
+package de.lbeck.tipdabottle.container.dto.in;
 
 import de.lbeck.tipdabottle.common.enums.ProductCategory;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
-public record ProductUpdateDTO(
+public record RequestContainerCreateDTO(
         @NotEmpty
         String name,
         String description,
-        @Positive
-        double price,
         @NotNull
         ProductCategory category,
-        @Positive
-        int stock) {
+        @Min(1)
+        int capacity,
+        @Min(0)
+        int stock
+) {
 }

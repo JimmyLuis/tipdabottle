@@ -1,6 +1,8 @@
 package de.lbeck.tipdabottle.container.controller;
 
-import de.lbeck.tipdabottle.container.dto.ContainerDTO;
+import de.lbeck.tipdabottle.common.annotations.View;
+import de.lbeck.tipdabottle.container.dto.out.ResponseContainerPublicDTO;
+import de.lbeck.tipdabottle.container.model.Container;
 import de.lbeck.tipdabottle.container.service.ContainerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +20,9 @@ public class ContainerController {
         this.containerService = containerService;
     }
 
+    @View(Container.class)
     @GetMapping
-    public List<ContainerDTO> getAllContainers() {
+    public List<Container> getAllContainers() {
         return containerService.getAllContainers();
     }
 }

@@ -1,11 +1,12 @@
 package de.lbeck.tipdabottle.product.controller;
 
-import de.lbeck.tipdabottle.product.dto.ProductCreateDTO;
-import de.lbeck.tipdabottle.product.dto.ProductDTO;
-import de.lbeck.tipdabottle.product.dto.ProductUpdateDTO;
+import de.lbeck.tipdabottle.common.annotations.View;
+import de.lbeck.tipdabottle.product.dto.in.RequestProductUpdateDTO;
+import de.lbeck.tipdabottle.product.dto.in.RequestProductCreateDTO;
+import de.lbeck.tipdabottle.product.dto.out.ResponseProductPublicDTO;
+import de.lbeck.tipdabottle.product.model.Product;
 import de.lbeck.tipdabottle.product.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,24 +23,28 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @View(Product.class)
     @GetMapping
-    public List<ProductDTO> getAllProducts(){
+    public List<Product> getAllProducts(){
         return productService.getAllProducts();
     }
 
+    @View(Product.class)
     @GetMapping("/{id}")
-    public ProductDTO getProductById(@PathVariable Long id){
+    public Product getProductById(@PathVariable Long id){
         return productService.getProductById(id);
     }
 
+    @View(Product.class)
     @PostMapping
-    public ProductDTO createProductWithContainer(@Valid @RequestBody ProductCreateDTO productCreateDTO){
-        return productService.createProductWithContainer(productCreateDTO);
+    public Product createProductWithContainer(@Valid @RequestBody RequestProductCreateDTO requestProductCreateDTO){
+        return productService.createProductWithContainer(requestProductCreateDTO);
     }
 
+    @View(Product.class)
     @PutMapping("/{id}")
-    public ProductDTO updateProduct(@Valid @RequestBody ProductUpdateDTO productUpdateDTO, @PathVariable Long id){
-        return productService.updateProduct(id, productUpdateDTO);
+    public Product updateProduct(@Valid @RequestBody RequestProductUpdateDTO requestProductUpdateDTO, @PathVariable Long id){
+        return productService.updateProduct(id, requestProductUpdateDTO);
     }
 
 }

@@ -1,9 +1,9 @@
-package de.lbeck.tipdabottle.purchase.dto;
+package de.lbeck.tipdabottle.purchase.dto.in;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 
-public record PurchaseReverseDTO(
+public record RequestPurchaseReverseDTO(
         @NotNull
         Long id,
         @NotNull
