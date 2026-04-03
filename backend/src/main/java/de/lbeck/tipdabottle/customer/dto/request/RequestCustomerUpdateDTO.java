@@ -1,10 +1,9 @@
-package de.lbeck.tipdabottle.customer.dto;
+package de.lbeck.tipdabottle.customer.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
-public record CustomerUpdateDTO(
+public record RequestCustomerUpdateDTO(
         @NotEmpty
         String firstName,
         String lastName,

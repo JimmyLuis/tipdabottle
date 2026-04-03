@@ -1,14 +1,12 @@
 package de.lbeck.tipdabottle.customer.controller;
 
-import de.lbeck.tipdabottle.customer.dto.CustomerBalanceDTO;
-import de.lbeck.tipdabottle.customer.dto.CustomerCreateDTO;
-import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
-import de.lbeck.tipdabottle.customer.dto.CustomerUpdateDTO;
+import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerUpdateDTO;
+import de.lbeck.tipdabottle.customer.dto.response.ResponseCustomerDTO;
+import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerCreateDTO;
+import de.lbeck.tipdabottle.customer.dto.request.RequestCustomerBalanceDTO;
 import de.lbeck.tipdabottle.customer.service.CustomerService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,33 +24,33 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDTO> getAllCustomers(@RequestParam (defaultValue = "0") Boolean listInactiveProfiles) {
+    public List<ResponseCustomerDTO> getAllCustomers(@RequestParam (defaultValue = "0") Boolean listInactiveProfiles) {
         return customerService.getAllCustomers(listInactiveProfiles);
     }
 
     @GetMapping("/{id}")
-    public CustomerDTO getCustomerById(@PathVariable Long id){
+    public ResponseCustomerDTO getCustomerById(@PathVariable Long id){
         return customerService.getCustomerById(id);
     }
 
     @GetMapping(params = "email")
-    public CustomerDTO getCustomerByEMail(@RequestParam @NotEmpty String email){
+    public ResponseCustomerDTO getCustomerByEMail(@RequestParam @NotEmpty String email){
         return customerService.getCustomerEMail(email);
     }
 
     @PostMapping
-    public CustomerDTO createCustomer(@Valid @RequestBody CustomerCreateDTO customerCreateDTO){
-        return customerService.createCustomer(customerCreateDTO);
+    public ResponseCustomerDTO createCustomer(@Valid @RequestBody RequestCustomerCreateDTO requestCustomerCreateDTO){
+        return customerService.createCustomer(requestCustomerCreateDTO);
     }
 
     @PostMapping("/{id}/balance")
-    public CustomerDTO changeCustomerBalance(@PathVariable Long id, @Valid @RequestBody CustomerBalanceDTO customerBalanceDTO){
-        return customerService.changeCustomerBalance(id, customerBalanceDTO);
+    public ResponseCustomerDTO changeCustomerBalance(@PathVariable Long id, @Valid @RequestBody RequestCustomerBalanceDTO requestCustomerBalanceDTO){
+        return customerService.changeCustomerBalance(id, requestCustomerBalanceDTO);
     }
 
     @PutMapping("/{id}")
-    public CustomerDTO updateCustomer(@Valid @RequestBody CustomerUpdateDTO customerUpdateDTO, @PathVariable Long id){
-        return customerService.updateCustomer(id, customerUpdateDTO );
+    public ResponseCustomerDTO updateCustomer(@Valid @RequestBody RequestCustomerUpdateDTO requestCustomerUpdateDTO, @PathVariable Long id){
+        return customerService.updateCustomer(id, requestCustomerUpdateDTO);
     }
 
 

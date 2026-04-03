@@ -1,6 +1,6 @@
-package de.lbeck.tipdabottle.customer.dto;
+package de.lbeck.tipdabottle.customer.dto.response;
 
-public record CustomerDTO(
+public record ResponseCustomerDTO(
         Long id,
         String firstName,
         String lastName,

@@ -3,8 +3,6 @@ package de.lbeck.tipdabottle.container.service;
 import de.lbeck.tipdabottle.container.dto.ContainerDTO;
 import de.lbeck.tipdabottle.container.dto.ContainerMapper;
 import de.lbeck.tipdabottle.container.repository.ContainerRepository;
-import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
-import de.lbeck.tipdabottle.customer.dto.CustomerMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

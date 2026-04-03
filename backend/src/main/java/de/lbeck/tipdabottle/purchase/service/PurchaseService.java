@@ -2,7 +2,7 @@ package de.lbeck.tipdabottle.purchase.service;
 
 
 import de.lbeck.tipdabottle.container.model.Container;
-import de.lbeck.tipdabottle.customer.dto.CustomerDTO;
+import de.lbeck.tipdabottle.customer.dto.response.ResponseCustomerDTO;
 import de.lbeck.tipdabottle.customer.dto.CustomerMapper;
 import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.customer.service.CustomerService;
@@ -16,9 +16,6 @@ import de.lbeck.tipdabottle.purchase.model.Purchase;
 import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseGroupRepository;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseRepository;
-import jakarta.persistence.OrderBy;
-import org.hibernate.query.Order;
-import org.hibernate.query.SortDirection;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -102,9 +99,9 @@ public class PurchaseService {
 
     public List<PurchaseResponseDTO> createPurchases(Long customerId , List<PurchaseCreateDTO> purchaseCreateDTOList){
         if (purchaseCreateDTOList.isEmpty()) throw new PurchaseDeniedException("Cant submit purchase without any products!");
-        CustomerDTO customerDTO = customerService.getCustomerById(customerId);
-        validateCustomerPurchase(customerDTO, purchaseCreateDTOList);
-        Customer customer = customerMapper.toEntity(customerDTO);
+        ResponseCustomerDTO responseCustomerDTO = customerService.getCustomerById(customerId);
+        validateCustomerPurchase(responseCustomerDTO, purchaseCreateDTOList);
+        Customer customer = customerMapper.toEntity(responseCustomerDTO);
         AtomicReference<Double> customerBalance = new AtomicReference<>(customer.getBalance());
 
         List<Product> productList = new ArrayList<>();
@@ -158,7 +155,7 @@ public class PurchaseService {
         return product;
     }
 
-    private void validateCustomerPurchase(CustomerDTO customer, List<PurchaseCreateDTO> purchaseCreateDTOList){
+    private void validateCustomerPurchase(ResponseCustomerDTO customer, List<PurchaseCreateDTO> purchaseCreateDTOList){
         if (!customer.activeProfile()) throw new PurchaseDeniedException("Customer " + customer.email() + " is not an active profile");
         if (customer.locked()) throw new PurchaseDeniedException("Customer " + customer.email() + " is blocked for purchasing");
 
@@ -169,10 +166,10 @@ public class PurchaseService {
     }
 
     public List<PurchaseResponseDTO> reversePurchases(Long customerId , List<PurchaseReverseDTO> purchaseReverseDTOList) {
-        CustomerDTO customerDTO = customerService.getCustomerById(customerId);
-        validateCustomerPurchaseReverse(customerDTO, purchaseReverseDTOList);
+        ResponseCustomerDTO responseCustomerDTO = customerService.getCustomerById(customerId);
+        validateCustomerPurchaseReverse(responseCustomerDTO, purchaseReverseDTOList);
 
-        Customer customer = customerMapper.toEntity(customerDTO);
+        Customer customer = customerMapper.toEntity(responseCustomerDTO);
         AtomicReference<Double> customerBalance = new AtomicReference<>(customer.getBalance());
 
         List<Product> productList = new ArrayList<>();
@@ -228,7 +225,7 @@ public class PurchaseService {
         return product;
     }
 
-    private void validateCustomerPurchaseReverse(CustomerDTO customer, List<PurchaseReverseDTO> purchaseReverseDTOList){
+    private void validateCustomerPurchaseReverse(ResponseCustomerDTO customer, List<PurchaseReverseDTO> purchaseReverseDTOList){
         if (!customer.activeProfile()) throw new PurchaseDeniedException("Customer " + customer.email() + " is not an active profile");
 
         purchaseReverseDTOList.forEach(purchase -> {
