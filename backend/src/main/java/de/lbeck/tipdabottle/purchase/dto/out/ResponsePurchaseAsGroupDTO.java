@@ -4,7 +4,7 @@ import java.util.List;
 
 public record ResponsePurchaseAsGroupDTO(
          Long id,
-         List<ResponsePurchaseDTO> items
+         List<ResponsePurchaseAdminDTO> items
 ) {
 
 }

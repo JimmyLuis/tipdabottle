@@ -1,5 +1,6 @@
 package de.lbeck.tipdabottle.product.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import de.lbeck.tipdabottle.common.enums.ProductCategory;
 import de.lbeck.tipdabottle.container.model.Container;
 import jakarta.persistence.*;
@@ -26,6 +27,7 @@ public class Product {
     private ProductCategory category;
     @Column
     private int stock;
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.DETACH)
     private Container container;
 

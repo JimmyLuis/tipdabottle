@@ -19,7 +19,7 @@ public class CustomerPrivateStrategy implements ViewStrategy<Customer> {
 
     @Override
     public boolean supports(Authentication auth, Customer entity) {
-        return true; //todo : rollen etc
+        return false; //todo : rollen etc
     }
 
     @Override

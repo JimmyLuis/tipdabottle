@@ -1,5 +1,6 @@
 package de.lbeck.tipdabottle.purchase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.product.model.Product;
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "purchase_group_id")
     private PurchaseGroup purchaseGroup;
     @ManyToOne
