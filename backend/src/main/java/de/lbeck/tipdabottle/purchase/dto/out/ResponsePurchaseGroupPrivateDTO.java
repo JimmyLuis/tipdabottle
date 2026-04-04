@@ -4,6 +4,6 @@ import java.util.List;
 
 public record ResponsePurchaseGroupPrivateDTO(
         Long id,
-        List<ResponsePurchasePrivateDTO> purchaseList
+        List<ResponsePurchasePrivateDTO> items
 ) {
 }
