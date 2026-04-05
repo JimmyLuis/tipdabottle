@@ -5,6 +5,7 @@ import de.lbeck.tipdabottle.purchase.dto.PurchaseGroupMapper;
 import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Order(1)
@@ -19,7 +20,7 @@ public class PurchaseGroupAdminStrategy  implements ViewStrategy<PurchaseGroup> 
 
     @Override
     public boolean supports(Authentication auth, PurchaseGroup entity) {
-        return false;
+        return auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override

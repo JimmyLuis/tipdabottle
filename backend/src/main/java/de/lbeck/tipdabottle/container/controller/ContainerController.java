@@ -4,6 +4,7 @@ import de.lbeck.tipdabottle.common.annotations.View;
 import de.lbeck.tipdabottle.container.dto.out.ResponseContainerPublicDTO;
 import de.lbeck.tipdabottle.container.model.Container;
 import de.lbeck.tipdabottle.container.service.ContainerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class ContainerController {
     public ContainerController(ContainerService containerService) {
         this.containerService = containerService;
     }
+
 
     @View(Container.class)
     @GetMapping

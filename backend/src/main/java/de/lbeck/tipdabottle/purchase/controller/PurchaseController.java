@@ -3,14 +3,13 @@ package de.lbeck.tipdabottle.purchase.controller;
 import de.lbeck.tipdabottle.common.annotations.View;
 import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseCreateDTO;
 import de.lbeck.tipdabottle.purchase.dto.in.RequestPurchaseReverseDTO;
-import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseAsGroupDTO;
-import de.lbeck.tipdabottle.purchase.dto.out.ResponsePurchaseAdminDTO;
 import de.lbeck.tipdabottle.purchase.model.Purchase;
 import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 import de.lbeck.tipdabottle.purchase.service.PurchaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import org.springframework.data.domain.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,18 +35,22 @@ public class PurchaseController {
         return purchaseService.getAllPurchases(page, size);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Purchase.class)
     @GetMapping("/{id}")
     public Purchase getPurchaseById(@PathVariable Long id){
         return purchaseService.getPurchaseById(id);
     }
 
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Purchase.class)
     @GetMapping("/group/{groupId}")
     public List<Purchase> getPurchasesByGroup(@PathVariable Long groupId){
         return purchaseService.getPurchasesByGroup(groupId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Purchase.class)
     @GetMapping("/customer/{customerId}")
     public Page<Purchase> getPurchasesByCustomer(

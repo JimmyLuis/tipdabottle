@@ -5,6 +5,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,5 +62,11 @@ class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body("Invalid parameter: " + ex.getName());
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleLoginMismatch(BadCredentialsException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body("Invalid password: " + ex.getMessage());
     }
 }
