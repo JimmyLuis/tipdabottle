@@ -6,11 +6,13 @@ import de.lbeck.tipdabottle.account.dto.out.ResponseAccountPublicDTO;
 import de.lbeck.tipdabottle.account.model.Account;
 import de.lbeck.tipdabottle.account.service.AccountService;
 import de.lbeck.tipdabottle.common.annotations.View;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,26 +26,34 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    @View(Account.class)
+    @PreAuthorize("hasAnyRole('ADMIN', 'SHARED', 'PRIVATE')")
+    @GetMapping("/me")
+    public Account getSession(HttpServletRequest request){
+        return accountService.getSession(request);
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody RequestAccountLoginDTO requestAccountLoginDTO, HttpServletResponse response){
-        ResponseCookie cookie = ResponseCookie.from("token", accountService.login(requestAccountLoginDTO, response))
+    public ResponseEntity<ResponseAccountPublicDTO> login(@Valid @RequestBody RequestAccountLoginDTO requestAccountLoginDTO, HttpServletResponse response){
+        ResponseAccountPublicDTO dto = accountService.login(requestAccountLoginDTO, response);
+        ResponseCookie cookie = ResponseCookie.from("token", dto.token())
                 .httpOnly(true)
-                .secure(false)
+                .secure(false) //todo not prod rdy
                 .path("/")
                 .maxAge(60*60*24)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(dto);
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'SHARED', 'PRIVATE')")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
 
         ResponseCookie cookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(false) //todo not prod rdy
                 .path("/")
                 .maxAge(0)
                 .build();

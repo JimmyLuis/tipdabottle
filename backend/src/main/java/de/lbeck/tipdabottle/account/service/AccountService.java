@@ -12,6 +12,8 @@ import de.lbeck.tipdabottle.customer.exception.EmailAlreadyExistsException;
 import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.customer.repository.CustomerRepository;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 public class AccountService {
@@ -43,7 +47,30 @@ public class AccountService {
         this.purchaseRepository = purchaseRepository;
     }
 
-    public String login(RequestAccountLoginDTO requestAccountLoginDTO, HttpServletResponse response) {
+    public Account getSession(HttpServletRequest request){
+        if (request.getCookies() == null || request.getCookies().length == 0){
+            throw new UsernameNotFoundException("Account does not exist!");
+        }
+        String token = Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("token"))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+        if (token == null || token.isEmpty()){
+            throw new UsernameNotFoundException("Account does not exist!");
+        }
+
+        String username = jwtService.extractUsername(token);
+
+        if (username != null) {
+            return accountRepository.findAccountById(Long.parseLong(username))
+                    .orElseThrow(() -> new UsernameNotFoundException("Account does not exist!"));
+        } else {
+            throw new UsernameNotFoundException("Account does not exist!");
+        }
+    }
+
+    public ResponseAccountPublicDTO login(RequestAccountLoginDTO requestAccountLoginDTO, HttpServletResponse response) {
         Account account = accountRepository.getAccountByEmail(requestAccountLoginDTO.email())
                 .orElseThrow(() -> new UsernameNotFoundException("No account found for provided Email!"));
 
@@ -58,8 +85,8 @@ public class AccountService {
 
         Account customerAccount = accountRepository.findAccountById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow();
-
-        return jwtService.generateToken(userDetails, customerAccount.getId()+"");
+        String token = jwtService.generateToken(userDetails, customerAccount.getId()+"");
+        return new ResponseAccountPublicDTO(customerAccount.getEmail(), customerAccount.getRole(), customerAccount.getCustomer(), token);
     }
 
     public ResponseAccountPublicDTO logout(){
