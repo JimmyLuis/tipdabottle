@@ -12,7 +12,9 @@ import de.lbeck.tipdabottle.customer.exception.EmailAlreadyExistsException;
 import de.lbeck.tipdabottle.customer.model.Customer;
 import de.lbeck.tipdabottle.customer.repository.CustomerRepository;
 import de.lbeck.tipdabottle.purchase.repository.PurchaseRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,7 +43,7 @@ public class AccountService {
         this.purchaseRepository = purchaseRepository;
     }
 
-    public ResponseAccountPublicDTO login(RequestAccountLoginDTO requestAccountLoginDTO) {
+    public String login(RequestAccountLoginDTO requestAccountLoginDTO, HttpServletResponse response) {
         Account account = accountRepository.getAccountByEmail(requestAccountLoginDTO.email())
                 .orElseThrow(() -> new UsernameNotFoundException("No account found for provided Email!"));
 
@@ -57,9 +59,7 @@ public class AccountService {
         Account customerAccount = accountRepository.findAccountById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow();
 
-        String token = jwtService.generateToken(userDetails, customerAccount.getId()+"");
-
-        return new ResponseAccountPublicDTO(customerAccount.getEmail(), customerAccount.getRole(), customerAccount.getCustomer(), token);
+        return jwtService.generateToken(userDetails, customerAccount.getId()+"");
     }
 
     public ResponseAccountPublicDTO logout(){
