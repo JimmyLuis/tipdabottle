@@ -28,6 +28,6 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Customer customer;
 }

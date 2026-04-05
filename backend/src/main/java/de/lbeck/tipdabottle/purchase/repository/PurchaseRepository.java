@@ -4,8 +4,10 @@ import de.lbeck.tipdabottle.purchase.model.Purchase;
 import de.lbeck.tipdabottle.purchase.model.PurchaseGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,4 +22,8 @@ public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
 
     List<Purchase> findAllByPurchaseGroupIn(List<PurchaseGroup> content);
+
+    @Modifying
+    @Query("UPDATE Purchase p SET p.customer = NULL WHERE p.customer.id = :id")
+    void detachCustomer(@Param("id") Long id);
 }

@@ -4,7 +4,9 @@ import de.lbeck.tipdabottle.account.dto.AccountMapper;
 import de.lbeck.tipdabottle.account.model.Account;
 import de.lbeck.tipdabottle.common.viewstrategy.ViewStrategy;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountPublicStrategy implements ViewStrategy<Account> {
 
     private final AccountMapper accountMapper;
