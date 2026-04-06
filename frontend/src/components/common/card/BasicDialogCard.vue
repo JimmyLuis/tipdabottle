@@ -24,10 +24,8 @@ defineProps(['height', 'width'])
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-banner class="pt-0"></v-banner>
-    </v-card-text>
-    <v-card-item class="pa-0">
+    <v-divider thickness="2" class="mx-3"></v-divider>
+    <v-card-item class="pr-1 mb-1">
       <slot name="body"><div class="bg-purple-lighten-2 py-16">BODY</div></slot>
     </v-card-item>
   </v-card>

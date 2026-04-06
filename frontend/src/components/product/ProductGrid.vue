@@ -49,7 +49,7 @@ function handleClick(product, index) {
 
 </script>
 <template>
-  <v-container fluid height="490" class="overflow-y-auto pt-0 mx-0 px-0">
+  <v-container fluid height="700" class="overflow-y-auto pt-0 mx-0 px-0">
     <v-row no-gutters v-if="props.products.length > 0">
       <v-col
         v-for="product in props.products"

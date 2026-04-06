@@ -46,11 +46,7 @@ watch(isActive, () => {
       <CustomerSlot v-bind="activatorProps" :customer />
     </template>
     <template v-slot:default>
-      <v-card height="700" >
-        <v-card-item >
-          <PurchaseCard :customer :products @submit="refreshCustomerAndExit" @close="isActive = false" />
-        </v-card-item>
-      </v-card>
+      <PurchaseCard :customer :products @submit="refreshCustomerAndExit" @close="isActive = false" />
     </template>
   </v-dialog>
 </template>
