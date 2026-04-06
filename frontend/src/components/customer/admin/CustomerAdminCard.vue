@@ -1,7 +1,4 @@
 <script setup>
-import ProductGrid from "@/components/product/ProductGrid.vue";
-import {ref} from "vue";
-import {useNotifyValidationStore} from "@/stores/app.js";
 import CustomerAdminEditForm from "@/components/customer/admin/CustomerAdminEditForm.vue";
 
 const props = defineProps({

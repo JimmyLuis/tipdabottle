@@ -1,8 +1,15 @@
 <script setup>
-import ProductGrid from "@/components/product/ProductGrid.vue";
-import {ref} from "vue";
-import {useNotifyValidationStore} from "@/stores/app.js";
 
+import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
+import CloseSubmitBtn from "@/components/common/card/actions/CloseSubmitBtn.vue";
+import BasicCustomerInfo from "@/components/customer/BasicCustomerInfo.vue";
+import SelectedProductList from "@/components/product/misc/SelectedProductList.vue";
+import {ref, watch} from "vue";
+import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
+import ProductGrid from "@/components/product/ProductGrid.vue";
+import {purchaseProducts} from "@/api/purchaseApi.js";
+
+const emit = defineEmits(['close', 'submit'])
 const props = defineProps({
   customer: {
     type: Object,
@@ -19,13 +26,23 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['cancelPurchase', 'submitPurchase'])
-
 const purchase = ref(new Map)
 const purchaseWorth = ref(0.0)
 const purchaseViewList = ref([])
-const valStore = useNotifyValidationStore()
-const productMap = ref(new Map(props.products.map(product => [product.id, product])))
+const productMap = ref(new Map)
+
+watch(
+  () => props.products,
+  (products) => {
+    products.forEach(p => {
+      if (p.index == null) p.index = 0
+    })
+    if (productMap.value.size <= 0){
+      productMap.value = new Map(props.products.map(product => [product.id, product]))
+    }
+  },
+  { immediate: true }
+)
 
 const handleProductUpdate = (product) => {
   if (product.index <= 0) {
@@ -50,103 +67,53 @@ const handleProductUpdate = (product) => {
   })
 }
 
-function submitPurchase(){
+async function submitPurchase() {
   if (purchase.value.values().toArray().length <= 0) {
-    valStore.set('Du musst mindestens ein Getränk bestellen!')
+    useNotifyValidationStore().set('Du musst mindestens ein Getränk bestellen!')
     return
   }
-  emit('submitPurchase', purchase.value)
+  await purchaseProducts(props.customer.id, purchase.value.values().toArray())
+    .then(res => {
+      if (res)
+        useNotifyStore().set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
+    })
+  props.products.forEach(p => {
+    p.index = 0
+  })
+  emit('submit')
 }
 
 </script>
 
 <template>
-  <v-card>
-    <div class="pl-4">
-      <v-card-title class="pb-3">
-        <v-row no-gutters>
-          <v-col
-            class="d-flex justify-space-between"
-          cols="12"
-          sm="8">
-            <div class="pr-3">
-              {{props.customer?.lastName}}<span v-if="!!props.customer.lastName">,</span>
-              {{props.customer?.firstName}}
-              <v-card-subtitle class="pa-0">
-                <div class="d-flex justify-start align-center pb-1">
-                  <div class="d-flex">
-                    <h3 class="pr-3"> Saldo: </h3>
-                    <div class="d-inline">
-                      <h3 class="justify-end d-flex">{{props.customer.balance.toFixed(2)}} €</h3>
-                      <v-slide-x-transition hide-on-leave>
-                        <h3 v-if="purchaseWorth > 0.0" class="text-primary-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h3>
-                      </v-slide-x-transition>
-                      <h3 v-if="!purchaseWorth > 0.0" class="text-transparent">- {{purchaseWorth.toFixed(2)}} €</h3>
-                    </div>
-                  </div>
-                  <v-spacer></v-spacer>
-                </div>
-              </v-card-subtitle>
+  <BasicDialogCard>
+    <template #header>
+      <div class="d-flex">
+        <BasicCustomerInfo :customer>
+          <template #below-balance>
+            <div class="d-inline">
+              <v-slide-x-transition hide-on-leave>
+                <h4 v-if="purchaseWorth > 0.0" class="text-primary-darken-2" :key="purchaseWorth">- {{purchaseWorth.toFixed(2)}} €</h4>
+              </v-slide-x-transition>
+              <h4 v-if="!purchaseWorth > 0.0" class="text-transparent">- {{purchaseWorth.toFixed(2)}} €</h4>
             </div>
-            <v-spacer/>
-            <v-card max-height="80" class="overflow-y-auto scroll-container"
-            elevation="0">
-              <v-card-item class="text-body-2">
-                <v-slide-x-reverse-transition :hide-on-leave="true" group>
-                  <div v-for="product in purchaseViewList" :key="product.id" class="scroll-content pb-1 justify-end d-flex">
-                    {{product.quantity}}x {{product.name}}
-                  </div>
-                  <div v-if="purchaseViewList.length <= 0" class="text-transparent ">
-                    tests
-                  </div>
-                </v-slide-x-reverse-transition>
-              </v-card-item>
-            </v-card>
-            <v-spacer/>
-          </v-col>
-          <v-col
-            class="d-flex justify-md-end justify-sm-center"
-            cols="12"
-          sm="4">
-            <div class="pr-2 d-flex align-center pb-8">
-              <v-btn class="mr-3" color="primary" icon="mdi-close" @click="emit('cancelPurchase')"></v-btn>
-              <v-divider vertical thickness="1" opacity="0.15" color=""></v-divider>
-              <v-btn class="ml-3" color="secondary" icon="mdi-arrow-right" @click="submitPurchase()"></v-btn>
-            </div>
-          </v-col>
-        </v-row>
-
-      </v-card-title>
-    </div>
-    <v-card-text>
-      <v-banner class="pt-0"></v-banner>
-    </v-card-text>
-    <v-card-item class="pt-0 px-0" >
+          </template>
+        </BasicCustomerInfo>
+        <v-spacer/>
+        <SelectedProductList :product-list="purchaseViewList" />
+        <v-spacer/>
+        <v-spacer/>
+      </div>
+    </template>
+    <template #header-actions>
+      <CloseSubmitBtn @close="emit('close')" @submit="submitPurchase()" class="justify-end"/>
+    </template>
+    <template #body>
       <ProductGrid :products :disabled-customer="customer.locked" @update-purchase="handleProductUpdate"/>
-    </v-card-item>
-  </v-card>
+    </template>
+  </BasicDialogCard>
 </template>
 
 <style scoped>
-.scroll-container {
-  position: relative;
-  top: 20px;
-  max-height: 75px;
-  overflow-y: auto;
-}
 
-/* Fade unten */
-.scroll-container::after {
-  content: "";
-  position: sticky;
-  bottom: 0;
-  display: block;
-  height: 50px;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
-}
 </style>

@@ -1,9 +1,5 @@
 <script setup>
-import CustomerSlot from "@/components/customer/CustomerSlot.vue";
 import {onMounted, ref} from "vue";
-import {apiFetch} from "@/api/http.js";
-import {getAllCustomers, getCustomerById} from "@/api/customerApi.js";
-import {getAllProducts} from "@/api/productApi.js";
 import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
 import PurchaseGroupHistorySlot from "@/components/purchase/history/PurchaseGroupHistorySlot.vue";
 import {getAllPurchases} from "@/api/purchaseApi.js";

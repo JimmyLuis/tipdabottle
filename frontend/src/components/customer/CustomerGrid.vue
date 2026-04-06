@@ -1,10 +1,9 @@
 <script setup>
-import CustomerSlot from "@/components/customer/CustomerSlot.vue";
-import {onMounted, ref} from "vue";
-import {apiFetch} from "@/api/http.js";
-import {getAllCustomers, getCustomerById} from "@/api/customerApi.js";
-import {getAllProducts} from "@/api/productApi.js";
-import {useNotifyValidationStore} from "@/stores/app.js";
+
+import {onBeforeMount, onMounted, ref, watch} from "vue";
+import {getCustomerById} from "@/api/customerApi.js";
+import PurchaseDialog from "@/components/purchase/PurchaseDialog.vue";
+import {useCustomerStore, useProductStore} from "@/stores/app.js";
 
 
 const customers = ref([]);
@@ -12,29 +11,37 @@ const customersDummy = ref([]);
 
 const products = ref([])
 
-
+onBeforeMount(async () => {
+  await useCustomerStore().fetchCustomers()
+  await useProductStore().fetchProducts()
+  customers.value = useCustomerStore().customers
+  sortCustomers()
+  products.value = useProductStore().products
+})
 
 onMounted(async () => {
-  for (let i = 0; i < 10; i++) {
-    let customer = {
-      id: i
-    }
+  for (let i = 0; i < 20; i++) {
+    let customer = {id: i}
     customersDummy.value.push(customer);
   }
-  customers.value = await getAllCustomers();
+})
+
+const sortCustomers = () => {
   customers.value.sort((a, b) => {
     if (b.community !== a.community) {
       return b.community - a.community
     }
     return a.lastName.localeCompare(b.lastName)
   })
-  products.value = await getAllProducts();
-})
+}
 
 
 const refreshCustomer = async (customer) => {
-  customers.value = customers.value.filter(item => item.id !== customer.id);
-  customers.value.push(await getCustomerById(customer.id))
+  const updated = await getCustomerById(customer.id)
+  const index = customers.value.findIndex(c => c.id === customer.id)
+  if (index !== -1) {
+    customers.value[index] = updated
+  }
   customers.value.sort((a, b) => {
     if (b.community !== a.community) {
       return b.community - a.community
@@ -57,7 +64,7 @@ const refreshCustomer = async (customer) => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <CustomerSlot v-if="customers" :customer :products @refresh-customer="refreshCustomer"/>
+          <PurchaseDialog :products :customer @refresh-customer="refreshCustomer"/>
         </v-sheet>
       </v-col>
     </v-row>

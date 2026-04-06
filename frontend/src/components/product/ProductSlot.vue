@@ -1,6 +1,6 @@
 <script setup>
 
-import {onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {onBeforeUnmount, ref, watch} from "vue";
 
 const emit = defineEmits(['increment', 'decrement'])
 

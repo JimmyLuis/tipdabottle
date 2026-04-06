@@ -1,6 +1,9 @@
 // Utilities
 import {defineStore} from 'pinia'
 import {getSession, login, logout} from "@/api/accountApi.js";
+import {getAllCustomers} from "@/api/customerApi.js";
+import {getAllPurchases} from "@/api/purchaseApi.js";
+import {getAllProducts} from "@/api/productApi.js";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -81,6 +84,66 @@ export const useAuthStore = defineStore('auth', {
     },
     async authenticate() {
       this.user = await getSession()
+    }
+  }
+})
+
+export const useCustomerStore = defineStore('customer', {
+  state: () => ({
+    customers: [],
+    loaded: false,
+    loading: false
+  }),
+
+  actions: {
+    async fetchCustomers() {
+      if (this.loading) return
+      this.loading = true
+      try {
+        let res = await getAllCustomers()
+        res.sort((a, b) => {
+          if (b.community !== a.community) {
+            return b.community - a.community
+          }
+          return a.lastName.localeCompare(b.lastName)
+        })
+        this.customers = res
+        this.loaded = true
+      } finally {
+        this.loading = false
+      }
+    },
+
+    clear() {
+      this.customers = []
+      this.loaded = false
+    }
+  }
+})
+
+export const useProductStore = defineStore('product', {
+  state: () => ({
+    products: [],
+    loaded: false,
+    loading: false
+  }),
+
+  actions: {
+    async fetchProducts() {
+      if (this.loading) return
+
+      this.loading = true
+      try {
+        this.products = await getAllProducts()
+        this.loaded = true
+      } finally {
+        this.loading = false
+      }
+    },
+
+    clear() {
+      this.products = []
+      this.loaded = false
     }
   }
 })

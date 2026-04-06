@@ -1,8 +1,5 @@
 <script setup>
-import PurchaseCard from "@/components/purchase/PurchaseCard.vue";
-import {purchaseProducts} from "@/api/purchaseApi.js";
-import {ref, watch} from "vue";
-import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
+import {ref} from "vue";
 import CustomerAdminCard from "@/components/customer/admin/CustomerAdminCard.vue";
 
 const props = defineProps({

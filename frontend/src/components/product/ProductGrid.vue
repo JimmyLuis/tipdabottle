@@ -25,17 +25,8 @@ onMounted(async () => {
     }
     productDummy.value.push(product);
   }
-
-  props.products.forEach(product => {
-    product.index = 0;
-  })
 })
 
-onBeforeUnmount(() => {
-  props.products.forEach(product => {
-    product.index = 0;
-  })
-})
 
 function validateBadgeColor(product){
   if (product.index === 0) return "transparent"
@@ -44,7 +35,6 @@ function validateBadgeColor(product){
 
 function validateBadgeVision(product){
   return product.index === 0;
-
 }
 
 let lastClick = 0
@@ -77,11 +67,10 @@ function handleClick(product, index) {
           <template v-slot:badge>
             <h3>{{product.index}}</h3>
           </template>
-
           <v-sheet class="ma-0 pa-0 flex-grow-1 " :class="{'v-card--disabled': disabledCustomer}" style="user-select: none" >
             <ProductSlot @click.stop.prevent="handleClick(product, 1)" v-if="props.products" :product
-            @decrement="handleClick(product, -1)"
-            @increment="handleClick(product, 1)"
+                         @decrement="handleClick(product, -1)"
+                         @increment="handleClick(product, 1)"
             />
           </v-sheet>
         </v-badge>
@@ -94,10 +83,10 @@ function handleClick(product, index) {
         v-for="product in productDummy"
         :key="product.id"
         cols="12"
-        sm="4"
+        sm="6"
       >
         <v-sheet class="ma-2 pa-2">
-          <v-skeleton-loader elevation="2" type="paragraph"></v-skeleton-loader>
+          <v-skeleton-loader elevation="2" type="card" ></v-skeleton-loader>
         </v-sheet>
       </v-col>
     </v-row>

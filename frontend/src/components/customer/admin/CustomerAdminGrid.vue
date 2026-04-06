@@ -1,5 +1,4 @@
 <script setup>
-import CustomerSlot from "@/components/customer/CustomerSlot.vue";
 import {onMounted, ref} from "vue";
 import {apiFetch} from "@/api/http.js";
 import {getAllCustomers, getAllCustomersWithInactive, getCustomerById} from "@/api/customerApi.js";

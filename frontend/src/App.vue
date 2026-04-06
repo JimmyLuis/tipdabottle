@@ -16,7 +16,6 @@ import Default from "@/layouts/default.vue";
   import router from "@/router/index.js";
 
   onBeforeMount(async () => {
-    console.log("LOGIN!")
     await useAuthStore().authenticate()
     if (!useAuthStore().isAuthenticated) {
       router.push("/login")
