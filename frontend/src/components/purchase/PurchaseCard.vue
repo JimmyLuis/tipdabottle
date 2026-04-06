@@ -4,7 +4,7 @@ import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
 import CloseSubmitBtn from "@/components/common/card/actions/CloseSubmitBtn.vue";
 import BasicCustomerInfo from "@/components/customer/BasicCustomerInfo.vue";
 import SelectedProductList from "@/components/product/misc/SelectedProductList.vue";
-import {ref, watch} from "vue";
+import {onBeforeUnmount, ref, watch} from "vue";
 import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
 import ProductGrid from "@/components/product/ProductGrid.vue";
 import {purchaseProducts} from "@/api/purchaseApi.js";
@@ -77,11 +77,13 @@ async function submitPurchase() {
       if (res)
         useNotifyStore().set(`Vielen Dank für deine Bestellung! Dein Konto wurde angepasst ;)`)
     })
+  emit('submit')
+}
+onBeforeUnmount(()=>{
   props.products.forEach(p => {
     p.index = 0
   })
-  emit('submit')
-}
+})
 
 </script>
 
