@@ -137,7 +137,7 @@ const scrollToPurchaseGroup = async (purchaseGroup) => {
   }
   50% {
     transform: scale(1.05);
-    background-color: rgba(76, 175, 80, 0.15); /* 🔥 leicht grün */
+    background-color: rgba(76, 175, 80, 0.15);
   }
   100% {
     transform: scale(1);

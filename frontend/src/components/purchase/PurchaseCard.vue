@@ -88,7 +88,7 @@ onBeforeUnmount(()=>{
 </script>
 
 <template>
-  <BasicDialogCard height="850">
+  <BasicDialogCard height="85vh">
     <template #header>
       <div class="d-flex">
         <BasicCustomerInfo :customer>

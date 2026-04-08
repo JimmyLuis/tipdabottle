@@ -44,14 +44,14 @@ const propagatePurchaseSelect = (purchase) => {
 </script>
 
 <template>
-  <v-container height="500" fluid class=" overflow-y-auto">
+  <v-container height="65dvh" fluid class=" overflow-y-auto">
     <v-row v-if="purchases.length > 0">
       <v-col
         v-for="purchase in purchases"
         :key="purchase.id"
         cols="12"
         sm="12"
-        class="d-inline"
+        class="d-inline pl-0"
       >
         <PurchaseHistorySlot :purchase @purchase-select="propagatePurchaseSelect"/>
       </v-col>

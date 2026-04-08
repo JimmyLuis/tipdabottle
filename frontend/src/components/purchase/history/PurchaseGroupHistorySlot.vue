@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue";
 import PurchaseHistoryCard from "@/components/purchase/history/PurchaseHistoryCard.vue";
 import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
 import {revertPurchase} from "@/api/purchaseApi.js";
+import PurchaseHistoryCardRefactor from "@/components/purchase/history/refactor/PurchaseHistoryCardRefactor.vue";
 
 const props = defineProps({
   purchaseGroup: {
@@ -150,7 +151,7 @@ async function submitRemainingPurchases() {
                 <v-container
                   class="d-flex justify-center align-center">
                   <v-card
-                    width="400"**
+                    width="400"
                     title="Gesamte Bestellung löschen?"
                     subtitle="Dieser Vorgang kann nicht rückgängig gemacht werden.">
                     <v-card-actions class="justify-space-evenly">
@@ -171,11 +172,7 @@ async function submitRemainingPurchases() {
       </v-card>
     </template>
     <template v-slot:default>
-      <v-card height="700" >
-        <v-card-item >
-          <PurchaseHistoryCardRefactor :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
-        </v-card-item>
-      </v-card>
+      <PurchaseHistoryCardRefactor :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
     </template>
   </v-dialog>
 </template>

@@ -3,6 +3,8 @@
 import PurchaseHistoryGrid from "@/components/purchase/history/PurchaseHistoryGrid.vue";
 import {onMounted, ref} from "vue";
 import {getCustomerById} from "@/api/customerApi.js";
+import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
+import CloseSubmitBtn from "@/components/common/card/actions/CloseSubmitBtn.vue";
 
 const props = defineProps({
   purchaseGroup: {
@@ -67,16 +69,8 @@ const handlePurchaseSelect = (purchase) => {
 </script>
 
 <template>
-  <BasicDialogCard>
+  <BasicDialogCard height="80vh">
     <template #header>
-
-    </template>
-    <template #header-actions>
-    </template>
-    <template></template>
-  </BasicDialogCard>
-  <v-card>
-    <div class="pl-4">
       <v-card-title class="pb-3">
         <v-row no-gutters>
           <v-col
@@ -89,7 +83,7 @@ const handlePurchaseSelect = (purchase) => {
                 <h6 class="pb-1 pl-3 opacity-70" v-if="!!reversedPurchase">Bestellreferenz #{{reversedPurchase}}</h6>
                 <v-spacer></v-spacer>
               </div>
-              <v-card-subtitle>
+              <v-card-subtitle class="pa-0">
                 <div class="d-flex justify-start align-center pb-1">
                   <div class="d-flex">
                     <h3 class="pr-3"> Bestellwert: </h3>
@@ -105,31 +99,20 @@ const handlePurchaseSelect = (purchase) => {
             cols="12"
             sm="4">
             <div class="text-h6">Benutzer</div>
-            <v-card-subtitle>
+            <v-card-subtitle class="pa-0">
               <h3>{{customer.lastName}}<span v-if="!!customer.firstName">, {{customer.firstName}}</span></h3>
             </v-card-subtitle>
           </v-col>
-          <v-col
-            class="d-flex justify-md-end justify-sm-center"
-            cols="12"
-            sm="4">
-            <div class="pr-2 d-flex align-center">
-              <v-btn class="mr-3" color="primary" icon="mdi-close" @click="emit('cancelPurchaseEdit')"></v-btn>
-              <v-divider vertical thickness="1" opacity="0.15"></v-divider>
-              <v-btn class="ml-3" color="secondary" icon="mdi-arrow-right" @click="emit('submitPurchaseEdit', selectedPurchases)"></v-btn>
-            </div>
-          </v-col>
         </v-row>
       </v-card-title>
-    </div>
-    <v-card-text class="py-0">
-      <div class="d-none d-sm-flex text-body-2 opacity-70 pb-1 align-center">{{purchaseGroup.items[0].creationTime}}</div>
-      <v-banner class="py-0"></v-banner>
-    </v-card-text>
-    <v-card-item class="pt-0 px-0" >
+    </template>
+    <template #header-actions>
+      <CloseSubmitBtn class="justify-end" @close=" emit('cancelPurchaseEdit')" @submit="emit('submitPurchaseEdit', selectedPurchases)"></CloseSubmitBtn>
+    </template>
+    <template #body>
       <PurchaseHistoryGrid :purchases="purchaseGroup.items" @purchase-select="handlePurchaseSelect"/>
-    </v-card-item>
-  </v-card>
+    </template>
+  </BasicDialogCard>
 </template>
 
 <style scoped>
