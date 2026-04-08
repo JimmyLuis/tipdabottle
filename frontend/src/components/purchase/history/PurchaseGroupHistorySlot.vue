@@ -1,9 +1,8 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import PurchaseHistoryCard from "@/components/purchase/history/PurchaseHistoryCard.vue";
 import {useNotifyStore, useNotifyValidationStore} from "@/stores/app.js";
 import {revertPurchase} from "@/api/purchaseApi.js";
-import PurchaseHistoryCardRefactor from "@/components/purchase/history/refactor/PurchaseHistoryCardRefactor.vue";
+import PurchaseHistoryCard from "@/components/purchase/history/card/PurchaseHistoryCard.vue";
 
 const props = defineProps({
   purchaseGroup: {
@@ -172,7 +171,7 @@ async function submitRemainingPurchases() {
       </v-card>
     </template>
     <template v-slot:default>
-      <PurchaseHistoryCardRefactor :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
+      <PurchaseHistoryCard :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
     </template>
   </v-dialog>
 </template>

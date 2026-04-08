@@ -5,6 +5,8 @@ import {onMounted, ref} from "vue";
 import {getCustomerById} from "@/api/customerApi.js";
 import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
 import CloseSubmitBtn from "@/components/common/card/actions/CloseSubmitBtn.vue";
+import BasicCustomerInfo from "@/components/customer/BasicCustomerInfo.vue";
+import BasicPurchaseInformation from "@/components/purchase/history/card/BasicPurchaseInformation.vue";
 
 const props = defineProps({
   purchaseGroup: {
@@ -44,21 +46,6 @@ onMounted(async () => {
 })
 
 
-function calculatePurchaseGroupWorth() {
-  let worth = 0.0
-  props.purchaseGroup.items.forEach(purchase => {
-    worth = worth + purchase.worth
-  })
-  props.purchaseGroup.items.forEach(purchase => {
-    if (!!purchase.reversedReference){
-      worth = worth - purchase.worth
-    }
-  })
-  //hinzugefügt weil -0.00 anzeige war
-  if (worth < 0.0099) worth *= -1
-  return worth
-}
-
 const handlePurchaseSelect = (purchase) => {
   if (selectedPurchases.value.get(purchase.id)){
     selectedPurchases.value.delete(purchase.id)
@@ -76,32 +63,14 @@ const handlePurchaseSelect = (purchase) => {
           <v-col
             class="d-flex justify-space-between"
             cols="12"
-            sm="4">
-            <div class="pr-3">
-              <div class="d-flex align-end">
-                Bestellung #{{purchaseGroup.id}}
-                <h6 class="pb-1 pl-3 opacity-70" v-if="!!reversedPurchase">Bestellreferenz #{{reversedPurchase}}</h6>
-                <v-spacer></v-spacer>
-              </div>
-              <v-card-subtitle class="pa-0">
-                <div class="d-flex justify-start align-center pb-1">
-                  <div class="d-flex">
-                    <h3 class="pr-3"> Bestellwert: </h3>
-                    <h3 class="justify-end d-flex">{{calculatePurchaseGroupWorth().toFixed(2)}} €</h3>
-                  </div>
-                  <v-spacer></v-spacer>
-                </div>
-              </v-card-subtitle>
-            </div>
+            sm="6">
+            <BasicPurchaseInformation :purchase-group="purchaseGroup" :reversed-purchase="reversedPurchase"/>
           </v-col>
           <v-col
             class=""
             cols="12"
-            sm="4">
-            <div class="text-h6">Benutzer</div>
-            <v-card-subtitle class="pa-0">
-              <h3>{{customer.lastName}}<span v-if="!!customer.firstName">, {{customer.firstName}}</span></h3>
-            </v-card-subtitle>
+            sm="6">
+            <BasicCustomerInfo :customer="customer" />
           </v-col>
         </v-row>
       </v-card-title>
