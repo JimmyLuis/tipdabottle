@@ -1,7 +1,7 @@
 // services/api.js
 import {useErrorStore} from "@/stores/app.js";
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = window.location.protocol + "//" + window.location.hostname + ":8080"
 
 
 export async function apiFetch(url, options = {}, suppressErrors= false) {

@@ -173,7 +173,7 @@ async function submitRemainingPurchases() {
     <template v-slot:default>
       <v-card height="700" >
         <v-card-item >
-          <PurchaseHistoryCard :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
+          <PurchaseHistoryCardRefactor :purchaseGroup @cancel-purchase-edit="isActive = !isActive" @submit-purchase-edit="submitPurchaseEdit"/>
         </v-card-item>
       </v-card>
     </template>

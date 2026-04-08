@@ -1,6 +1,5 @@
 <script setup>
 
-
 import PurchaseHistoryGrid from "@/components/purchase/history/PurchaseHistoryGrid.vue";
 import {onMounted, ref} from "vue";
 import {getCustomerById} from "@/api/customerApi.js";
@@ -68,6 +67,14 @@ const handlePurchaseSelect = (purchase) => {
 </script>
 
 <template>
+  <BasicDialogCard>
+    <template #header>
+
+    </template>
+    <template #header-actions>
+    </template>
+    <template></template>
+  </BasicDialogCard>
   <v-card>
     <div class="pl-4">
       <v-card-title class="pb-3">

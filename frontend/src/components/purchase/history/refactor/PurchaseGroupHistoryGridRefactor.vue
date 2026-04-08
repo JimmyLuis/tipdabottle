@@ -97,7 +97,7 @@ const scrollToPurchaseGroup = async (purchaseGroup) => {
         sm="12"
       >
         <v-sheet class="ma-2 pa-2 group-item" :class="{ active: activeJumpElement === purchaseGroup.id }" :ref="el => purchaseGroupJumpRefs[purchaseGroup.id] = el">
-          <PurchaseGroupHistorySlot :purchaseGroup @refresh-purchases="refresh" @jump-to-reference-purchase-group="scrollToPurchaseGroup"/>
+          <PurchaseHistoryDialog :purchaseGroup @refresh-purchases="refresh" @jump-to-reference-purchase-group="scrollToPurchaseGroup"/>
         </v-sheet>
       </v-col>
     </v-row>
