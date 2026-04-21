@@ -1,12 +1,9 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import {apiFetch} from "@/api/http.js";
-import {getAllCustomers, getAllCustomersWithInactive, getCustomerById} from "@/api/customerApi.js";
+import {getAllCustomersWithInactive, getCustomerById} from "@/api/customerApi.js";
 import {getAllProducts} from "@/api/productApi.js";
-import {useNotifyValidationStore} from "@/stores/app.js";
-import CustomerAdminSlot from "@/components/customer/admin/CustomerAdminSlot.vue";
-import ProductAdminAddSlot from "@/components/product/admin/add/ProductAdminAddSlot.vue";
 import CustomerAdminAddSlot from "@/components/customer/admin/add/CustomerAdminAddSlot.vue";
+import CustomerAdminDialog from "@/components/customer/admin/CustomerAdminDialog.vue";
 
 
 const customers = ref([]);
@@ -65,7 +62,7 @@ const refreshAllCustomers = async () => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <CustomerAdminSlot v-if="customers" :customer :products @refresh-customer="refreshAllCustomers"/>
+          <CustomerAdminDialog v-if="customers" :customer @refresh-customer="refreshAllCustomers"/>
         </v-sheet>
       </v-col>
     </v-row>
