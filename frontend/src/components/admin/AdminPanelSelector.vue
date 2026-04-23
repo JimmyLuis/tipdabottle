@@ -10,8 +10,8 @@ const handleSelection = (route) => {
   emit('closePanel')
 }
 
-function logout(){
-  useAuthStore().logout()
+async function logout() {
+  await useAuthStore().logout()
   window.location.reload()
 }
 </script>
