@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue";
 import {getAllProducts} from "@/api/productApi.js";
 import ProductAdminSlot from "@/components/product/admin/ProductAdminSlot.vue";
 import ProductAdminAddSlot from "@/components/product/admin/add/ProductAdminAddSlot.vue";
+import ProductAdminDialog from "@/components/product/admin/ProductAdminDialog.vue";
 
 
 const products = ref([]);
@@ -39,7 +40,7 @@ const refreshAllProducts = async () => {
         sm="4"
       >
         <v-sheet class="ma-2 pa-2">
-          <ProductAdminSlot v-if="products" :product/>
+          <ProductAdminDialog v-if="products" :product/>
         </v-sheet>
       </v-col>
     </v-row>

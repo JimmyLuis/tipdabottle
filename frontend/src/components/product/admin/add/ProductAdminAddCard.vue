@@ -3,6 +3,8 @@
 import {ref, watch} from "vue";
 import {useNotifyStore} from "@/stores/app.js";
 import {createProduct} from "@/api/productApi.js";
+import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
+import CloseBtn from "@/components/common/card/actions/CloseBtn.vue";
 
 
 const emit = defineEmits(['cancelEdit', 'refreshAllProducts'])
@@ -63,28 +65,22 @@ watch(() => [product.value.container.capacity, product.value.container.stock, pr
 </script>
 
 <template>
-  <v-card>
-    <v-row>
-      <v-col cols="12" sm="9">
-        <v-card-title>Erstelle ein neues Produkt</v-card-title>
-        <v-card-subtitle>und den Container in dem das Produkt aufbewahrt wird.</v-card-subtitle>
-      </v-col>
-      <v-col
-        class="d-flex justify-md-end justify-sm-center"
-        cols="12"
-        sm="3">
-        <div class="pr-2 d-flex align-center pb-8">
-          <v-btn color="primary" icon="mdi-close" @click="emit('cancelEdit')"></v-btn>
-        </div>
-      </v-col>
-    </v-row>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-row class="w-100">
+  <BasicDialogCard>
+    <template #header>
+      <v-card-title>Erstelle ein neues Produkt</v-card-title>
+      <v-card-subtitle>und den Container in dem das Produkt aufbewahrt wird.</v-card-subtitle>
+    </template>
+    <template #header-actions>
+      <div class="justify-end d-flex">
+        <CloseBtn @close="emit('cancelEdit')"/>
+      </div>
+    </template>
+    <template #body>
+      <v-row class="pb-3">
 
         <!-- 🧾 Produkt Formular -->
         <v-col cols="12" md="6">
-          <v-card class="pa-4 h-100">
+          <v-card class="pa-4" border elevation="0">
             <v-card-title>Produkt</v-card-title>
 
             <v-form ref="form" v-model="valid">
@@ -128,7 +124,7 @@ watch(() => [product.value.container.capacity, product.value.container.stock, pr
 
         <!-- 📦 Container Formular -->
         <v-col cols="12" md="6">
-          <v-card class="pa-4 h-100">
+          <v-card class="pa-4" elevation="0" border>
 
             <v-card-title>Kontainer</v-card-title>
 
@@ -167,11 +163,15 @@ watch(() => [product.value.container.capacity, product.value.container.stock, pr
 
           </v-card>
         </v-col>
+        <v-card-actions  class="d-flex flex-grow-1 ma-1">
+          <v-btn  @click="submit" :disabled="!valid" color="primary" block class="border">Speichern</v-btn>
+        </v-card-actions>
 
       </v-row>
-    </v-card-actions>
-    <v-card-actions><v-btn @click="submit" :disabled="!valid" color="primary" block border>Speichern</v-btn></v-card-actions>
-  </v-card>
+
+    </template>
+  </BasicDialogCard>
+
 </template>
 
 <style scoped>

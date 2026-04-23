@@ -3,6 +3,8 @@
 import {ref} from "vue";
 import {useNotifyStore} from "@/stores/app.js";
 import {updateProduct} from "@/api/productApi.js";
+import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
+import CloseBtn from "@/components/common/card/actions/CloseBtn.vue";
 
 
 const emit = defineEmits(['cancelEdit', 'submitNewProduct'])
@@ -46,29 +48,26 @@ const submit = () => {
 </script>
 
 <template>
-<v-card>
-  <v-row>
-    <v-col cols="12" sm="3">
-      <v-card-title>{{product.name}}</v-card-title>
-      <v-card-subtitle>{{product.description}}</v-card-subtitle>
-    </v-col>
-    <v-col cols="12" sm="6">
-      <v-card-title>Preis: {{product.price.toFixed(2)}} €</v-card-title>
-      <v-card-subtitle>{{product.category}}</v-card-subtitle>
-    </v-col>
-    <v-col
-      class="d-flex justify-md-end justify-sm-center"
-      cols="12"
-      sm="3">
-      <div class="pr-2 d-flex align-center pb-8">
-        <v-btn color="primary" icon="mdi-close" @click="emit('cancelEdit')"></v-btn>
-      </div>
-    </v-col>
-  </v-row>
-  <v-divider></v-divider>
-  <v-card-actions>
-    <v-card class="pa-4 flex-grow-1">
+  <BasicDialogCard>
+    <template #header>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-card-title>{{product.name}}</v-card-title>
+          <v-card-subtitle>{{product.description}}</v-card-subtitle>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-card-title>Preis: {{product.price.toFixed(2)}} €</v-card-title>
+          <v-card-subtitle>{{product.category}}</v-card-subtitle>
+        </v-col>
 
+      </v-row>
+    </template>
+    <template #header-actions>
+      <div class="d-flex justify-end">
+        <CloseBtn @close="emit('cancelEdit')"/>
+      </div>
+    </template>
+    <template #body>
       <v-form ref="form" v-model="valid">
 
         <v-text-field
@@ -114,9 +113,9 @@ const submit = () => {
         </v-btn>
 
       </v-form>
-    </v-card>
-  </v-card-actions>
-</v-card>
+    </template>
+  </BasicDialogCard>
+
 </template>
 
 <style scoped>
