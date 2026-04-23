@@ -31,6 +31,7 @@ public class CustomerController {
         return customerService.getAllCustomers(listInactiveProfiles);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Customer.class)
     @GetMapping("/{id}")
     public Customer getCustomerById(@PathVariable Long id){

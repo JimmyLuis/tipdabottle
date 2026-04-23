@@ -3,6 +3,7 @@
 import {ref} from "vue";
 import AdminLoginForm from "@/components/login/AdminLoginForm.vue";
 import AdminPanelSelector from "@/components/admin/AdminPanelSelector.vue";
+import {useAuthStore} from "@/stores/app.js";
 
 const isActive = ref(false)
 const isLoggedIn = ref(false)
@@ -16,8 +17,8 @@ const isLoggedIn = ref(false)
       <v-btn v-bind="activatorProps" icon="mdi-account-cog-outline"/>
     </template>
     <template v-slot:default>
-      <AdminLoginForm v-if="isLoggedIn"/>
-      <AdminPanelSelector @close-panel="isActive = !isActive"/>
+      <AdminLoginForm v-if="!useAuthStore().isAdmin"/>
+      <AdminPanelSelector v-else @close-panel="isActive = !isActive"/>
     </template>
   </v-dialog>
 </template>

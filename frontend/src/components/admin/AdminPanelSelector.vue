@@ -1,12 +1,18 @@
 <script setup>
 
 import router from "@/router/index.js";
+import {useAuthStore} from "@/stores/app.js";
 
 const emit = defineEmits(['closePanel'])
 
 const handleSelection = (route) => {
   router.push(route);
   emit('closePanel')
+}
+
+function logout(){
+  useAuthStore().logout()
+  window.location.reload()
 }
 </script>
 
@@ -44,7 +50,7 @@ const handleSelection = (route) => {
         </v-col>
         <v-col cols="12" sm="4" class="d-flex justify-center align-center">
           <div class="d-flex flex-column align-center text-center">
-            <v-btn border="md" rounded="circle" size="80" color="primary">
+            <v-btn border="md" rounded="circle" size="80" color="primary" @click="logout()">
               <v-icon icon="mdi-exit-to-app" size="60"></v-icon>
             </v-btn>
             <div class="pt-2 text-h6">Abmelden</div>

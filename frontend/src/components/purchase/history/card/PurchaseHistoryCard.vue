@@ -7,6 +7,7 @@ import BasicDialogCard from "@/components/common/card/BasicDialogCard.vue";
 import CloseSubmitBtn from "@/components/common/card/actions/CloseSubmitBtn.vue";
 import BasicCustomerInfo from "@/components/customer/BasicCustomerInfo.vue";
 import BasicPurchaseInformation from "@/components/purchase/history/card/BasicPurchaseInformation.vue";
+import {useAuthStore} from "@/stores/app.js";
 
 const props = defineProps({
   purchaseGroup: {
@@ -37,7 +38,7 @@ const customer = ref({})
 const reversedPurchase = ref()
 
 onMounted(async () => {
-  customer.value = await getCustomerById(props.purchaseGroup.items[0].customerId)
+  if (useAuthStore().isAdmin) customer.value = await getCustomerById(props.purchaseGroup.items[0].customerId)
   let containsReversedP;
   props.purchaseGroup.items.forEach(item => {
     if (item.reversedGroupReference) containsReversedP = item.reversedGroupReference
@@ -70,7 +71,7 @@ const handlePurchaseSelect = (purchase) => {
             class=""
             cols="12"
             sm="6">
-            <BasicCustomerInfo :customer="customer" />
+            <BasicCustomerInfo :customer="customer" v-if="useAuthStore().isAdmin"/>
           </v-col>
         </v-row>
       </v-card-title>

@@ -7,6 +7,7 @@ import de.lbeck.tipdabottle.product.dto.out.ResponseProductPublicDTO;
 import de.lbeck.tipdabottle.product.model.Product;
 import de.lbeck.tipdabottle.product.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +36,14 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Product.class)
     @PostMapping
     public Product createProductWithContainer(@Valid @RequestBody RequestProductCreateDTO requestProductCreateDTO){
         return productService.createProductWithContainer(requestProductCreateDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @View(Product.class)
     @PutMapping("/{id}")
     public Product updateProduct(@Valid @RequestBody RequestProductUpdateDTO requestProductUpdateDTO, @PathVariable Long id){
